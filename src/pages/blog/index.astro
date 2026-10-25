@@ -1,0 +1,139 @@
+---
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+import PostCard from '../../components/PostCard.astro';
+import Featured from '../../components/Featured.astro';
+import Subscribe from '../../components/Subscribe.astro';
+import { getPosts, topics } from '../../data/blog';
+
+const posts = await getPosts();
+const [latest, ...rest] = posts;
+// Topic chips only help once there are posts in more than one topic.
+const used = topics.filter((t) => posts.some((p) => p.data.topic === t.id));
+const showChips = used.length > 1;
+---
+<Base
+  title="Blog — Akbarov Labs"
+  description="Saytlar, Telegram botlar va AI haqida — oddiy tilda, biznes egalari uchun."
+  current="blog"
+>
+  <section class="intro rule">
+    <div class="intro-title">
+      <span class="mono">[BLOG] YOZUVLAR</span>
+      <h1 class="huge">blog.</h1>
+    </div>
+    <div class="intro-side">
+      <p>Saytlar, Telegram botlar va AI haqida — oddiy tilda, biznes egalari uchun.</p>
+    </div>
+  </section>
+
+  {showChips && (
+    <div role="group" aria-label="Mavzular" class="chips rule" data-chips>
+      <button type="button" aria-pressed="true" data-topic="all">Hammasi</button>
+      {used.map((t) => (
+        <button type="button" aria-pressed="false" data-topic={t.id}>{t.label}</button>
+      ))}
+    </div>
+  )}
+
+  {latest && (
+    <div class="rule" data-topic-item={latest.data.topic}>
+      <Featured post={latest} label="YANGI" />
+    </div>
+  )}
+
+  {rest.length > 0 && (
+    <div class="grid rule">
+      {rest.map((p) => (
+        <div data-topic-item={p.data.topic}><PostCard post={p} excerpt /></div>
+      ))}
+    </div>
+  )}
+
+  {posts.length === 0 && <p class="empty">Birinchi maqola tez orada.</p>}
+
+  <Subscribe />
+  <Footer slot="footer" />
+</Base>
+
+<script>
+  const group = document.querySelector<HTMLElement>('[data-chips]');
+  if (group) {
+    const buttons = group.querySelectorAll<HTMLButtonElement>('button');
+    const items = document.querySelectorAll<HTMLElement>('[data-topic-item]');
+    group.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('button');
+      if (!btn) return;
+      const topic = btn.dataset.topic;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+      items.forEach((el) => {
+        el.hidden = topic !== 'all' && el.dataset.topicItem !== topic;
+      });
+    });
+  }
+</script>
+
+<style>
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .intro-title {
+    flex: 1 1 560px;
+    min-width: 0;
+    padding: 32px var(--gutter) 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .intro-side {
+    flex: 1 1 380px;
+    min-width: 0;
+    padding: 32px var(--gutter) 40px;
+    border-left: 1px solid var(--line);
+  }
+  .intro-side p {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 20px var(--gutter);
+  }
+  .chips button {
+    font: 500 15px var(--sans);
+    padding: 0 18px;
+    min-height: 44px;
+    border-radius: 999px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid rgba(31, 30, 27, 0.3);
+  }
+  .chips button[aria-pressed='true'] {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  }
+  .grid > div {
+    display: grid;
+  }
+  .empty {
+    padding: 48px var(--gutter);
+    font-size: 19px;
+  }
+  @media (max-width: 640px) {
+    .intro-side {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+import { site, contactHref, contactLabel } from '../data/site';
+// With a channel set this asks people to subscribe; without one it invites them to write.
+const channel = site.telegramChannel;
+---
+<section class="sub dark">
+  <div class="text">
+    <span class="mono accent">{channel ? '[OBUNA]' : '[ALOQA]'}</span>
+    {channel ? (
+      <>
+        <h2>Yangi maqolalarni Telegramda oling</h2>
+        <p>Haftasiga koʻpi bilan bitta xabar. Reklama yoʻq.</p>
+      </>
+    ) : (
+      <>
+        <h2>Savolingiz bormi? Yozing</h2>
+        <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
+      </>
+    )}
+  </div>
+  {channel ? (
+    <a href={`https://t.me/${channel}`} class="btn btn-accent" rel="noopener">Kanalga obuna boʻlish</a>
+  ) : (
+    <a href={contactHref} class="btn btn-accent">{contactLabel}</a>
+  )}
+</section>
+
+<style>
+  .sub {
+    padding: 56px var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .text {
+    flex: 1 1 480px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .accent {
+    color: var(--copper-on-dark) !important;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(28px, 3.4vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--body-on-dark);
+  }
+</style>

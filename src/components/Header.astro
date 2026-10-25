@@ -1,0 +1,84 @@
+---
+import Mark from './Mark.astro';
+
+interface Props {
+  current?: 'home' | 'blog' | 'other';
+}
+const { current = 'home' } = Astro.props;
+// On the home page the section links are plain anchors; elsewhere they go back home.
+const home = current === 'home' ? '' : '/';
+const links = [
+  { href: `${home}#xizmatlar`, label: 'Xizmatlar' },
+  { href: `${home}#ishlar`, label: 'Ishlar' },
+  { href: `${home}#narxlar`, label: 'Narxlar' },
+  { href: '/blog/', label: 'Blog', active: current === 'blog' },
+];
+---
+<header class="rule">
+  <nav aria-label="Asosiy menyu" class="nav">
+    <a href="/" class="brand" aria-label="Akbarov Labs — bosh sahifa">
+      <Mark size={32} />
+      <span>akbarov <span class="labs">labs</span></span>
+    </a>
+    <div class="links">
+      {links.map((l) => (
+        <a href={l.href} aria-current={l.active ? 'page' : undefined}>{l.label}</a>
+      ))}
+    </div>
+    <a href={`${home}#aloqa`} class="btn btn-ink btn-sm cta">Bogʻlanish</a>
+  </nav>
+</header>
+
+<style>
+  .nav {
+    padding: 12px var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 32px;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ink);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.4px;
+    padding: 8px 0;
+  }
+  .labs {
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
+    flex: 1 1 auto;
+    justify-content: center;
+    font-size: 15px;
+    font-weight: 500;
+  }
+  .links a {
+    text-decoration: none;
+    padding: 12px 0;
+  }
+  .links a[aria-current='page'] {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+  @media (max-width: 640px) {
+    .nav {
+      justify-content: space-between;
+    }
+    .links {
+      order: 3;
+      flex-basis: 100%;
+      justify-content: space-between;
+      gap: 0 12px;
+    }
+  }
+</style>

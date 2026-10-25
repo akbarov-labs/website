@@ -1,0 +1,703 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+import Mark from '../components/Mark.astro';
+import Spark from '../components/Spark.astro';
+import PostCard from '../components/PostCard.astro';
+import Featured from '../components/Featured.astro';
+import kitoblarim from '../assets/kitoblarim.png';
+import { site, plans, contactHref, contactLabel } from '../data/site';
+import { getPosts } from '../data/blog';
+
+const posts = (await getPosts()).slice(0, 3);
+
+const services = [
+  {
+    title: 'Veb-saytlar',
+    text: 'Landing, korporativ sayt, onlayn doʻkon. Tez yuklanadi, telefonda yaxshi koʻrinadi, Googleʼda topiladi.',
+    icon: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',
+  },
+  {
+    title: 'Telegram botlar va Mini App',
+    text: 'Buyurtma, yozilish, toʻlov va xabarnomalar — mijozlaringiz har kuni ochadigan ilova ichida.',
+    icon: '<path d="M21 4 3 11l6.5 2.2L19 7l-7.2 7.3.4 5.7 3.3-4.1L19.5 19z"/>',
+  },
+  {
+    title: 'CRM va admin panellar',
+    text: 'Mijozlar, buyurtmalar va hisobotlar bitta joyda. Excel va daftarlar oʻrniga.',
+    icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 15h7M14 18h5M14 21h7"/>',
+  },
+  {
+    title: 'AI yordamchilar',
+    text: 'Mijozlarga javob beradigan bot, arizalarni saralash, hisobotlar boʻyicha oddiy tilda savol-javob.',
+    icon: '<path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/>',
+    accent: true,
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  url: site.url,
+  logo: `${site.url}/icon-512.png`,
+  description: site.description,
+  founder: { '@type': 'Person', name: site.founder },
+  areaServed: 'UZ',
+  sameAs: [site.instagram && `https://instagram.com/${site.instagram}`, site.telegram && `https://t.me/${site.telegram}`].filter(Boolean),
+};
+---
+<Base title="Akbarov Labs — saytlar, Telegram botlar va AI" jsonLd={jsonLd}>
+  <!-- [01] Hero -->
+  <section class="rule">
+    <div class="mono strip rule">
+      <span>[01] IT VA AI STUDIYA</span>
+      <span>Oʻzbekiston — 2026</span>
+    </div>
+    <div class="hero">
+      <h1 class="huge hero-title">
+        <span>sayt.</span><br /><span>bot.</span><br /><span>ai.</span><Spark size="0.32em" class="hero-spark" />
+      </h1>
+      <div class="hero-side">
+        <p class="lead">{site.description}</p>
+        <div class="tags">
+          <span class="tag">Veb-saytlar</span>
+          <span class="tag">Telegram botlar</span>
+          <span class="tag">Mini App</span>
+          <span class="tag">CRM</span>
+          <span class="tag">AI</span>
+        </div>
+        <div class="row">
+          <a href="#aloqa" class="btn btn-accent">Loyihani muhokama qilish</a>
+          <a href="#ishlar" class="btn btn-outline">Ishlarimiz</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- [02] Services -->
+  <section id="xizmatlar" class="rule">
+    <div class="section-head">
+      <h2>Nima quramiz</h2>
+      <span class="mono">[02] XIZMATLAR</span>
+    </div>
+    <div class="services">
+      {services.map((s) => (
+        <div class="service">
+          <div class:list={['icon', { 'icon-accent': s.accent }]}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={s.icon} />
+          </div>
+          <h3>{s.title}</h3>
+          <p>{s.text}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- [03] Work log -->
+  <section id="ishlar" class="rule">
+    <div class="section-head">
+      <h2>Ishga tushirilganlar</h2>
+      <span class="mono">[03] LABORATORIYA JURNALI</span>
+    </div>
+    <article class="log">
+      <dl class="log-meta">
+        <div><dt>LOG</dt><dd>001</dd></div>
+        <div><dt>TURI</dt><dd>Telegram bot + Mini App</dd></div>
+        <div><dt>HOLAT</dt><dd class="live"><span class="dot"></span>Ishlamoqda</dd></div>
+        <div><dt>TILLAR</dt><dd>Oʻzbek, rus, ingliz</dd></div>
+      </dl>
+      <div class="log-text">
+        <h3>Kitoblarim</h3>
+        <p>
+          Boshlagan kitobingizni oxirigacha oʻqishga yordam beradigan bepul Telegram ilova. Tugatish sanasini tanlaysiz —
+          ilova kuniga necha sahifa oʻqish kerakligini hisoblaydi va Telegramda eslatib turadi.
+        </p>
+        <ul>
+          <li>Shaxsiy va oilaviy kutubxona, shtrix-kod orqali kitob qoʻshish</li>
+          <li>Telegram guruhlarda oʻqish marafonlari</li>
+          <li>Audiokitoblar pleyeri</li>
+          <li>Keyingi kitobni tanlashda maslahatchi</li>
+        </ul>
+        <a href="https://t.me/kitob_javonim_bot" class="ext" rel="noopener">@kitob_javonim_bot →</a>
+      </div>
+      <div class="log-pic">
+        <Image src={kitoblarim} alt="Kitoblarim logotipi: “Har bir kitob oʻz javonida.”" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 480px" />
+      </div>
+    </article>
+    <a href="#aloqa" class="next">
+      <span class="mono">002</span>
+      <span class="next-text">Keyingi yozuv — sizning loyihangiz.</span>
+      <span class="next-arrow" aria-hidden="true">→</span>
+    </a>
+  </section>
+
+  <!-- [04] AI -->
+  <section class="dark">
+    <div class="ai">
+      <div class="ai-text">
+        <span class="mono accent-on-dark">[04] SUNʼIY INTELLEKT</span>
+        <h2>AI bilan tezroq ishlaymiz — va sizga ham oʻrnatib beramiz</h2>
+        <p>
+          Har bir loyihada Claude kabi zamonaviy AI vositalaridan foydalanamiz: kod tezroq yoziladi, koʻproq tekshiriladi va
+          siz natijani ertaroq koʻrasiz.
+        </p>
+      </div>
+      <ul class="ai-list">
+        <li><Spark size="22" fill="var(--copper-on-dark)" />Mijozlarga kecha-kunduz javob beradigan Telegram yordamchi</li>
+        <li><Spark size="22" fill="var(--copper-on-dark)" />Ariza va hujjatlarni avtomatik saralash</li>
+        <li><Spark size="22" fill="var(--copper-on-dark)" />Sotuv va hisobotlar boʻyicha oddiy tilda savol-javob</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- [05] Founder -->
+  <section class="founder rule">
+    <div class="founder-pic">
+      {site.founderPhoto ? (
+        <img src={site.founderPhoto} alt={site.founder} loading="lazy" />
+      ) : (
+        <Mark size={160} />
+      )}
+    </div>
+    <div class="founder-text">
+      <span class="mono">[05] KIM QURADI</span>
+      <blockquote>“Siz menejer bilan emas, kodni yozadigan odam bilan gaplashasiz.”</blockquote>
+      <div class="founder-sign">
+        <p>Har bir loyihani oʻzim boshqaraman. Natijani har hafta koʻrsatib boraman.</p>
+        <p class="mono ink">{site.founder.toUpperCase()} — ASOSCHI</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- [06] Prices -->
+  <section id="narxlar" class="rule">
+    <div class="section-head">
+      <h2>Narxlar</h2>
+      <span class="mono">[06] BOSHLANGʻICH NARXLAR</span>
+    </div>
+    <div class="plans">
+      {plans.map((p) => (
+        <div class:list={['plan', { 'plan-dark': p.featured }]}>
+          <div class="plan-head">
+            <h3>{p.name}</h3>
+            {p.featured && <span class="badge">Koʻp soʻraladi</span>}
+          </div>
+          {p.price ? (
+            <p class="price">{p.price} <span>soʻmdan</span></p>
+          ) : (
+            <p class="price price-ask">Narxi suhbatda aniqlanadi</p>
+          )}
+          <ul>
+            {p.items.map((i) => <li>— {i}</li>)}
+          </ul>
+          {p.term && <p class="mono term">MUDDAT: {p.term.toUpperCase()}</p>}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Blog -->
+  {posts.length > 0 && (
+    <section id="blog" class="rule">
+      <div class="section-head">
+        <h2>Blogdan</h2>
+        <a href="/blog/" class="all">Barcha maqolalar →</a>
+      </div>
+      {posts.length === 1 ? (
+        <div class="blog-one"><Featured post={posts[0]} /></div>
+      ) : (
+        <div class="blog-grid">{posts.map((p) => <PostCard post={p} />)}</div>
+      )}
+    </section>
+  )}
+
+  <!-- [07] Contact -->
+  <section id="aloqa" class="dark">
+    <div class="mono contact-label">[07] ALOQA</div>
+    <div class="contact">
+      <h2 class="huge">yozing.</h2>
+      <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
+      <div class="contact-links">
+        <a href={contactHref} class="btn btn-accent">{contactLabel}</a>
+        {site.telegram && <a href={`mailto:${site.email}`}>{site.email}</a>}
+        {site.instagram && <a href={`https://instagram.com/${site.instagram}`} rel="noopener">@{site.instagram}</a>}
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</Base>
+
+<style>
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding: 18px var(--gutter);
+  }
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+  .hero-title {
+    flex: 1 1 620px;
+    min-width: 0;
+    padding: 32px var(--gutter) 40px;
+  }
+  .hero-title :global(.hero-spark) {
+    vertical-align: top;
+    margin-left: 0.04em;
+    margin-top: 0.06em;
+  }
+  .hero-side {
+    flex: 1 1 400px;
+    min-width: 0;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 24px;
+    border-left: 1px solid var(--line);
+  }
+  .lead {
+    margin: 0;
+    font-size: 21px;
+    line-height: 1.5;
+  }
+  .tags,
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .row {
+    gap: 12px;
+  }
+
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    border-top: 1px solid var(--line);
+  }
+  .service {
+    padding: 32px var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: -1px;
+  }
+  .icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--ink);
+    color: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-accent {
+    background: var(--copper);
+    color: #fff;
+  }
+  .service h3 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+  .service p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+
+  .log {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+  }
+  .log-meta {
+    flex: 0 1 220px;
+    margin: 0;
+    padding: 28px var(--gutter);
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .log-meta dt {
+    color: var(--muted);
+  }
+  .log-meta dd {
+    margin: 0;
+  }
+  .live {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--copper);
+  }
+  .log-text {
+    flex: 1 1 340px;
+    min-width: 0;
+    padding: 28px var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    border-left: 1px solid var(--line);
+  }
+  .log-text h3 {
+    margin: 0;
+    font-size: clamp(40px, 5vw, 60px);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-weight: 700;
+  }
+  .log-text p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+  .log-text ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--body);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ext {
+    font-family: var(--mono);
+    font-size: 14px;
+    padding: 8px 0;
+    align-self: flex-start;
+  }
+  .log-pic {
+    flex: 1 1 400px;
+    min-width: 0;
+    margin: var(--gutter);
+    border-radius: 20px;
+    overflow: hidden;
+    background: #161c19;
+    display: flex;
+    align-items: center;
+  }
+  .log-pic :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .next {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 28px var(--gutter);
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+  }
+  .next-text {
+    flex: 1;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .next-arrow {
+    font-size: 28px;
+    transition: transform 0.15s ease;
+  }
+  .next:hover .next-arrow {
+    transform: translateX(4px);
+  }
+
+  .ai {
+    padding: 80px var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: center;
+  }
+  .ai-text {
+    flex: 1 1 480px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .accent-on-dark {
+    color: var(--copper-on-dark) !important;
+  }
+  .ai h2 {
+    margin: 0;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  .ai-text p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--body-on-dark);
+  }
+  .ai-list {
+    flex: 1 1 380px;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .ai-list li {
+    border: 1px solid rgba(243, 239, 230, 0.18);
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    font-size: 17px;
+    line-height: 1.45;
+  }
+  .ai-list :global(svg) {
+    flex: none;
+    margin-top: 1px;
+  }
+
+  .founder {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .founder-pic {
+    flex: 1 1 340px;
+    min-width: 0;
+    min-height: 400px;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .founder-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .founder-text {
+    flex: 2 1 560px;
+    min-width: 0;
+    padding: 56px var(--gutter) 48px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    border-left: 1px solid var(--line);
+  }
+  blockquote {
+    margin: 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.15;
+  }
+  .founder-sign {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 620px;
+  }
+  .founder-sign p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .founder-sign .ink {
+    color: var(--ink);
+    font-size: 13px;
+  }
+
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 0 var(--gutter) 64px;
+  }
+  .plan {
+    background: #fff;
+    border: 1px solid rgba(31, 30, 27, 0.1);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .plan-dark {
+    background: var(--ink);
+    color: var(--cream);
+    border-color: var(--ink);
+  }
+  .plan-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .plan h3 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .badge {
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--copper);
+    color: #fff;
+    border-radius: 999px;
+    padding: 6px 12px;
+    white-space: nowrap;
+  }
+  .price {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+  }
+  .price span {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .price-ask {
+    font-size: 24px;
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+  }
+  .plan ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 16px;
+    color: var(--body);
+  }
+  .plan-dark ul {
+    color: var(--body-on-dark);
+  }
+  .plan-dark .price span,
+  .plan-dark .term {
+    color: var(--muted-on-dark);
+  }
+  .term {
+    margin: auto 0 0;
+  }
+
+  .all {
+    font-weight: 500;
+    font-size: 16px;
+    padding: 12px 0;
+  }
+  .blog-one {
+    border-top: 1px solid var(--line);
+  }
+  .blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    border-top: 1px solid var(--line);
+    margin-bottom: -1px;
+  }
+
+  .contact-label {
+    padding: var(--gutter);
+    border-bottom: 1px solid var(--line-on-dark);
+  }
+  .contact {
+    padding: 48px var(--gutter) 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .contact p {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--body-on-dark);
+    max-width: 560px;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 32px;
+    align-items: center;
+    font-size: 18px;
+  }
+  .contact-links a:not(.btn) {
+    padding: 12px 0;
+  }
+
+  @media (max-width: 640px) {
+    .hero-title {
+      padding-bottom: 24px;
+    }
+    .hero-side {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+      padding: 28px var(--gutter) 32px;
+    }
+    .lead {
+      font-size: 19px;
+    }
+    .log-text,
+    .founder-text {
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+    .log-meta {
+      flex-basis: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 12px 28px;
+    }
+    .founder-pic {
+      min-height: 260px;
+    }
+    .founder-text {
+      padding: 40px var(--gutter);
+    }
+    .plan {
+      padding: 24px;
+    }
+    .next-text {
+      font-size: 20px;
+    }
+    .ai {
+      padding: 56px var(--gutter);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .next-arrow {
+      transition: none;
+    }
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+import PostThumb from './PostThumb.astro';
+import { formatDate, postUrl, readingMinutes, type Post } from '../data/blog';
+
+interface Props {
+  post: Post;
+  excerpt?: boolean;
+}
+const { post, excerpt = false } = Astro.props;
+---
+<a href={postUrl(post)} class="card">
+  <PostThumb topic={post.data.topic} />
+  <span class="mono meta">{post.data.topic} · {formatDate(post.data.published).toUpperCase()} · {readingMinutes(post.body)} DAQ</span>
+  <h3>{post.data.title}</h3>
+  {excerpt && <p>{post.data.description}</p>}
+</a>
+
+<style>
+  .card {
+    text-decoration: none;
+    color: var(--ink);
+    padding: var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .card:hover h3 {
+    color: var(--copper-dark);
+  }
+  .meta {
+    font-size: 12px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
+  p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+</style>

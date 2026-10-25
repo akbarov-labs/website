@@ -1,0 +1,380 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Footer from '../../components/Footer.astro';
+import Mark from '../../components/Mark.astro';
+import PostThumb from '../../components/PostThumb.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts, formatDate, readingMinutes, postUrl, topics, type Post } from '../../data/blog';
+import { site, contactHref, contactLabel } from '../../data/site';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post, related: posts.filter((p) => p.id !== post.id).slice(0, 2) },
+  }));
+}
+
+interface Props {
+  post: Post;
+  related: Post[];
+}
+const { post, related } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
+const url = new URL(postUrl(post), site.url).href;
+const topicLabel = topics.find((t) => t.id === post.data.topic)?.label ?? post.data.topic;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BlogPosting',
+  headline: post.data.title,
+  description: post.data.description,
+  datePublished: post.data.published.toISOString(),
+  inLanguage: 'uz',
+  mainEntityOfPage: url,
+  author: { '@type': 'Person', name: site.founder },
+  publisher: { '@type': 'Organization', name: site.name, logo: { '@type': 'ImageObject', url: `${site.url}/icon-512.png` } },
+};
+---
+<Base
+  title={`${post.data.title} — Akbarov Labs`}
+  description={post.data.description}
+  current="blog"
+  type="article"
+  published={post.data.published}
+  jsonLd={jsonLd}
+>
+  <nav aria-label="Joylashuv" class="mono crumbs rule">
+    <a href="/blog/">BLOG</a><span aria-hidden="true">/</span><span>{topicLabel.toUpperCase()}</span>
+  </nav>
+
+  <header class="head rule">
+    <h1>{post.data.title}</h1>
+    <div class="byline">
+      <div class="who">
+        <span class="avatar"><Mark size={24} ink="var(--cream)" accent="var(--copper-on-dark)" /></span>
+        <span>{site.founder}</span>
+      </div>
+      <span class="mono">
+        <time datetime={post.data.published.toISOString().slice(0, 10)}>{formatDate(post.data.published).toUpperCase()}</time>{" · "}{readingMinutes(post.body)} DAQIQA OʻQISH
+      </span>
+    </div>
+  </header>
+
+  <div class="cover"><PostThumb topic={post.data.topic} height="100%" /></div>
+
+  <div class="body">
+    <aside class="side mono">
+      {toc.length > 1 && (
+        <nav aria-label="Mundarija" class="toc">
+          <span class="label">MUNDARIJA</span>
+          {toc.map((h, i) => (
+            <a href={`#${h.slug}`}>{String(i + 1).padStart(2, '0')} {h.text}</a>
+          ))}
+        </nav>
+      )}
+      <div class="toc">
+        <span class="label">ULASHISH</span>
+        <a href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(post.data.title)}`} rel="noopener">Telegram</a>
+        <button type="button" class="copy" data-copy={url}>Havolani nusxalash</button>
+      </div>
+    </aside>
+
+    <article class="prose">
+      <Content />
+
+      <div class="cta dark">
+        <p>Botingiz kerakmi yoki yoʻqmi — qisqa suhbatda birga aniqlaymiz.</p>
+        <a href={contactHref} class="btn btn-accent">{contactLabel}</a>
+      </div>
+
+      <div class="author">
+        <div class="author-pic">
+          {site.founderPhoto ? <img src={site.founderPhoto} alt="" /> : <Mark size={28} />}
+        </div>
+        <div>
+          <strong>{site.founder}</strong>
+          <span>Akbarov Labs asoschisi. Saytlar, Telegram botlar va AI yechimlar quradi.</span>
+        </div>
+      </div>
+    </article>
+  </div>
+
+  {related.length > 0 && (
+    <section class="related">
+      <div class="related-head">
+        <h2>Yana oʻqing</h2>
+        <a href="/blog/">Barcha maqolalar →</a>
+      </div>
+      <div class="related-grid">{related.map((p) => <PostCard post={p} />)}</div>
+    </section>
+  )}
+
+  <Footer slot="footer" />
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy ?? location.href);
+        const old = btn.textContent;
+        btn.textContent = 'Nusxalandi ✓';
+        setTimeout(() => (btn.textContent = old), 2000);
+      } catch {
+        prompt('Havola:', btn.dataset.copy ?? location.href);
+      }
+    });
+  });
+</script>
+
+<style>
+  .crumbs {
+    padding: 18px var(--gutter);
+    display: flex;
+    gap: 8px;
+  }
+  .crumbs a {
+    color: var(--muted);
+  }
+  .head {
+    padding: 56px var(--gutter) 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  h1 {
+    margin: 0;
+    max-width: 1000px;
+    font-size: clamp(36px, 6vw, 80px);
+    line-height: 1;
+    letter-spacing: -0.045em;
+    font-weight: 700;
+  }
+  .byline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 24px;
+  }
+  .who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+  }
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover {
+    height: 420px;
+    margin: var(--gutter);
+  }
+  .cover :global(.thumb) {
+    border-radius: 24px;
+  }
+  .body {
+    display: flex;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+  }
+  .side {
+    flex: 1 1 240px;
+    padding: 40px var(--gutter);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .toc {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+  }
+  .label {
+    padding-bottom: 6px;
+  }
+  .toc a,
+  .copy {
+    color: var(--ink);
+    text-decoration: none;
+    padding: 6px 0;
+  }
+  .copy {
+    font: inherit;
+    background: none;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+  .copy:hover,
+  .toc a:hover {
+    color: var(--copper-dark);
+  }
+
+  .prose {
+    flex: 3 1 560px;
+    min-width: 0;
+    max-width: 760px;
+    padding: 40px var(--gutter) 64px;
+    font-size: 19px;
+    line-height: 1.7;
+    color: #2e2c28;
+  }
+  .prose :global(> p:first-child) {
+    margin-top: 0;
+    font-size: 22px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+  .prose :global(p) {
+    margin: 0 0 16px;
+  }
+  .prose :global(h2) {
+    margin: 48px 0 16px;
+    font-size: 32px;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    scroll-margin-top: 24px;
+  }
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0 0 24px;
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .prose :global(blockquote) {
+    margin: 32px 0;
+    padding: 28px 32px;
+    background: #fff;
+    border: 1px solid rgba(31, 30, 27, 0.12);
+    border-radius: 20px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 26px;
+    line-height: 1.35;
+    color: var(--ink);
+  }
+  .prose :global(blockquote p) {
+    margin: 0;
+  }
+
+  .cta {
+    margin-top: 40px;
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .cta p {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.3;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .author {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  .author > div:last-child {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .author span {
+    color: var(--body);
+  }
+  .author-pic {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .author-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .related {
+    border-top: 1px solid var(--line);
+  }
+  .related-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px 24px;
+    padding: 40px var(--gutter) 24px;
+  }
+  .related-head h2 {
+    margin: 0;
+    font-size: 32px;
+    letter-spacing: -0.03em;
+  }
+  .related-head a {
+    font-weight: 500;
+    padding: 12px 0;
+  }
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    border-top: 1px solid var(--line);
+  }
+
+  @media (max-width: 640px) {
+    .head {
+      padding-top: 36px;
+    }
+    .cover {
+      height: 220px;
+    }
+    .side {
+      padding-bottom: 0;
+    }
+    .prose {
+      font-size: 18px;
+      padding-top: 24px;
+    }
+    .prose :global(> p:first-child) {
+      font-size: 20px;
+    }
+    .prose :global(blockquote) {
+      padding: 22px;
+      font-size: 22px;
+    }
+    .cta {
+      padding: 24px;
+    }
+    .cta p {
+      font-size: 21px;
+    }
+  }
+</style>

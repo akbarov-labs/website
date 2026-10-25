@@ -1,0 +1,76 @@
+---
+import PostThumb from './PostThumb.astro';
+import { formatDate, postUrl, readingMinutes, type Post } from '../data/blog';
+
+interface Props {
+  post: Post;
+  label?: string;
+}
+const { post, label } = Astro.props;
+---
+<a href={postUrl(post)} class="featured">
+  <div class="pic"><PostThumb topic={post.data.topic} height="100%" /></div>
+  <div class="text">
+    <span class="mono meta">{label && `${label} · `}{post.data.topic} · {formatDate(post.data.published).toUpperCase()} · {readingMinutes(post.body)} DAQ</span>
+    <h2>{post.data.title}</h2>
+    <p>{post.data.description}</p>
+    <span class="more">Oʻqish →</span>
+  </div>
+</a>
+
+<style>
+  .featured {
+    display: flex;
+    flex-wrap: wrap;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .pic {
+    flex: 1 1 480px;
+    min-width: 0;
+    height: 360px;
+    margin: var(--gutter);
+  }
+  .text {
+    flex: 1 1 360px;
+    min-width: 0;
+    padding: 32px var(--gutter) 40px 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+  }
+  .meta {
+    font-size: 12px;
+  }
+  h2 {
+    margin: 0;
+    font-size: clamp(28px, 3.4vw, 44px);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    font-weight: 700;
+  }
+  .featured:hover h2 {
+    color: var(--copper-dark);
+  }
+  p {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+  .more {
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+  @media (max-width: 640px) {
+    .pic {
+      height: 220px;
+      margin-bottom: 0;
+    }
+    .text {
+      padding: 20px var(--gutter) 32px;
+    }
+  }
+</style>

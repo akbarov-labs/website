@@ -1,0 +1,14 @@
+---
+// The "Ai" mark: ink A, accent i whose dot is the spark.
+interface Props {
+  size?: number;
+  ink?: string;
+  accent?: string;
+}
+const { size = 32, ink = 'var(--ink)', accent = 'var(--copper)' } = Astro.props;
+---
+<svg viewBox="6 9 91.5 81" width={size} height={Math.round((size * 81) / 91.5)} aria-hidden="true">
+  <path fill-rule="evenodd" fill={ink} d="M6 90 L32 14 H46 L72 90 H57 L53 77 H25 L21 90 Z M29.5 64 H48.5 L39 36 Z"></path>
+  <rect x="80" y="38" width="13" height="52" fill={accent}></rect>
+  <path fill={accent} d="M86.5 9 Q88.2 18.3 97.5 20 Q88.2 21.7 86.5 31 Q84.8 21.7 75.5 20 Q84.8 18.3 86.5 9 Z"></path>
+</svg>

@@ -1,0 +1,53 @@
+---
+import type { Topic } from '../data/blog';
+
+interface Props {
+  topic: Topic;
+  height?: string;
+}
+const { topic, height = '200px' } = Astro.props;
+---
+<div class:list={['thumb', `t-${topic.toLowerCase()}`]} style={`height: ${height}`} aria-hidden="true">
+  {topic === 'TELEGRAM' && (
+    <svg viewBox="0 0 24 24" width="30%" height="30%"><path fill="currentColor" d="M21 4 3 11l6.5 2.2L19 7l-7.2 7.3.4 5.7 3.3-4.1L19.5 19z" /></svg>
+  )}
+  {topic === 'AI' && (
+    <svg viewBox="0 0 24 24" width="30%" height="30%"><path fill="currentColor" d="M12 0c.8 6.3 4.7 10.2 12 12-7.3 1.8-11.2 5.7-12 12-.8-6.3-4.7-10.2-12-12C7.3 10.2 11.2 6.3 12 0z" /></svg>
+  )}
+  {topic === 'SAYTLAR' && <span>[ ]</span>}
+  {topic === 'BIZNES' && <span>▦</span>}
+</div>
+
+<style>
+  .thumb {
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 40px;
+    font-weight: 500;
+    max-height: 100%;
+  }
+  .thumb svg {
+    max-width: 140px;
+    max-height: 140px;
+  }
+  .t-telegram {
+    background: var(--ink);
+    color: var(--copper-on-dark);
+  }
+  .t-ai {
+    background: var(--copper);
+    color: #fff;
+  }
+  .t-saytlar {
+    background: var(--sand);
+    color: var(--ink);
+  }
+  .t-biznes {
+    background: #fff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+  }
+</style>
