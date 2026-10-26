@@ -1,0 +1,27 @@
+# Production stack on the Contabo server, at /opt/apps/akbarovlabs next to a
+# root-owned .env with DOMAIN=akbarovlabs.uz (see DEPLOY.md). One nginx
+# container serving the built site; no database yet.
+#
+# Public routing: the server's shared edge Caddy (caddy-docker-proxy) reads
+# the labels below and gets the HTTPS certificate. Cloudflare's proxy sits in
+# front of Caddy.
+
+services:
+  web:
+    image: ${IMAGE:-ghcr.io/akbarov-labs/website}:${IMAGE_TAG:-latest}
+    container_name: akbarovlabs-web
+    restart: unless-stopped
+    env_file: .env
+    mem_limit: 64m
+    networks:
+      - edge
+    labels:
+      caddy: ${DOMAIN:?set DOMAIN in .env, e.g. akbarovlabs.uz}
+      caddy.reverse_proxy: "{{upstreams 80}}"
+      # www.akbarovlabs.uz → akbarovlabs.uz, one address for search engines.
+      caddy_1: www.${DOMAIN}
+      caddy_1.redir: "https://${DOMAIN}{uri} permanent"
+
+networks:
+  edge:
+    external: true

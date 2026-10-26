@@ -1,0 +1,38 @@
+---
+// Girih tile: an eight-point star (two squares) with small diamonds at the
+// corners, repeated as a pattern. Purely decorative.
+interface Props {
+  id: string;
+  tile?: number;
+  star?: string;
+  hole?: string;
+  dot?: string;
+  opacity?: number;
+}
+const { id, tile = 100, star = 'var(--saffron)', hole = 'var(--lapis)', dot = 'var(--white)', opacity = 0.55 } = Astro.props;
+const s = tile;
+const half = s / 2;
+const q = s * 0.2;
+const d = s * 0.06;
+---
+<svg class="girih" aria-hidden="true" width="100%" height="100%" preserveAspectRatio="none">
+  <defs>
+    <pattern id={id} width={s} height={s} patternUnits="userSpaceOnUse">
+      <rect x={half - q} y={half - q} width={q * 2} height={q * 2} fill={star}></rect>
+      <rect x={half - q} y={half - q} width={q * 2} height={q * 2} fill={star} transform={`rotate(45 ${half} ${half})`}></rect>
+      <circle cx={half} cy={half} r={s * 0.09} fill={hole}></circle>
+      {[[0, 0], [s, 0], [0, s], [s, s]].map(([x, y]) => (
+        <rect x={x - d} y={y - d} width={d * 2} height={d * 2} fill={dot} transform={`rotate(45 ${x} ${y})`}></rect>
+      ))}
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill={`url(#${id})`} opacity={opacity}></rect>
+</svg>
+
+<style>
+  .girih {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+</style>

@@ -1,19 +1,38 @@
-<div class="foot dark">
-  <span>© {new Date().getFullYear()} AKBAROV LABS</span>
-  <span>CLAUDE BILAN QURILGAN</span>
-  <span>AKBAROVLABS.UZ</span>
-</div>
+---
+import Mark from './Mark.astro';
+---
+<footer class="foot dark">
+  <div class="wrap row">
+    <a href="/" class="brand" aria-label="Akbarov Labs — bosh sahifa">
+      <Mark size={28} ink="var(--white)" stem="var(--saffron)" spark="var(--saffron)" />
+      <span>akbarov labs</span>
+    </a>
+    <span>© {new Date().getFullYear()} Akbarov Labs · akbarovlabs.uz</span>
+    <span>Claude bilan qurilgan</span>
+  </div>
+</footer>
 
 <style>
   .foot {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 8px 24px;
-    padding: 20px var(--gutter);
-    border-top: 1px solid var(--line-on-dark);
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--muted-on-dark);
+    align-items: center;
+    gap: 12px 32px;
+    padding-block: 24px;
+    font-size: 14px;
+    color: var(--on-dark);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 16px;
   }
 </style>

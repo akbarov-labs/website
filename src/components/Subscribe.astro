@@ -1,33 +1,47 @@
 ---
+import Girih from './Girih.astro';
 import { site, contactHref, contactLabel } from '../data/site';
 // With a channel set this asks people to subscribe; without one it invites them to write.
 const channel = site.telegramChannel;
 ---
-<section class="sub dark">
-  <div class="text">
-    <span class="mono accent">{channel ? '[OBUNA]' : '[ALOQA]'}</span>
+<section class="sub">
+  <Girih id="g-sub" tile={80} star="var(--white)" hole="var(--lapis)" dot="var(--white)" opacity={0.09} />
+  <div class="wrap inner">
+    <div class="text">
+      <p class="label">{channel ? 'Obuna' : 'Aloqa'}</p>
+      {channel ? (
+        <>
+          <h2 class="h2">Yangi maqolalarni Telegramda oling</h2>
+          <p>Haftasiga koʻpi bilan bitta xabar. Reklama yoʻq.</p>
+        </>
+      ) : (
+        <>
+          <h2 class="h2">Savolingiz bormi? Yozing</h2>
+          <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
+        </>
+      )}
+    </div>
     {channel ? (
-      <>
-        <h2>Yangi maqolalarni Telegramda oling</h2>
-        <p>Haftasiga koʻpi bilan bitta xabar. Reklama yoʻq.</p>
-      </>
+      <a href={`https://t.me/${channel}`} class="btn btn-saffron" rel="noopener">Kanalga obuna boʻlish</a>
     ) : (
-      <>
-        <h2>Savolingiz bormi? Yozing</h2>
-        <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
-      </>
+      <a href={contactHref} class="btn btn-saffron">{contactLabel}</a>
     )}
   </div>
-  {channel ? (
-    <a href={`https://t.me/${channel}`} class="btn btn-accent" rel="noopener">Kanalga obuna boʻlish</a>
-  ) : (
-    <a href={contactHref} class="btn btn-accent">{contactLabel}</a>
-  )}
 </section>
 
 <style>
   .sub {
-    padding: 56px var(--gutter);
+    position: relative;
+    overflow: hidden;
+    background: var(--lapis);
+    color: var(--white);
+  }
+  .sub .label {
+    color: var(--saffron);
+  }
+  .inner {
+    position: relative;
+    padding-block: 72px;
     display: flex;
     flex-wrap: wrap;
     gap: 24px 48px;
@@ -41,20 +55,10 @@ const channel = site.telegramChannel;
     flex-direction: column;
     gap: 12px;
   }
-  .accent {
-    color: var(--copper-on-dark) !important;
-  }
-  h2 {
+  .text p:not(.label) {
     margin: 0;
-    font-size: clamp(28px, 3.4vw, 44px);
-    line-height: 1.1;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-  }
-  p {
-    margin: 0;
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.55;
-    color: var(--body-on-dark);
+    color: var(--on-dark);
   }
 </style>

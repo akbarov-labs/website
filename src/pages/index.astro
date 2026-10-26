@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
-import Footer from '../components/Footer.astro';
 import Mark from '../components/Mark.astro';
-import Spark from '../components/Spark.astro';
+import Girih from '../components/Girih.astro';
+import ChatDemo from '../components/ChatDemo.astro';
 import PostCard from '../components/PostCard.astro';
 import Featured from '../components/Featured.astro';
 import kitoblarim from '../assets/kitoblarim.png';
@@ -15,22 +15,22 @@ const posts = (await getPosts()).slice(0, 3);
 const services = [
   {
     title: 'Veb-saytlar',
-    text: 'Landing, korporativ sayt, onlayn doʻkon. Tez yuklanadi, telefonda yaxshi koʻrinadi, Googleʼda topiladi.',
+    text: 'Landing, korporativ sayt, onlayn doʻkon. Tez yuklanadi, telefonda qulay, Googleʼda topiladi.',
     icon: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',
   },
   {
-    title: 'Telegram botlar va Mini App',
+    title: 'Telegram botlar',
     text: 'Buyurtma, yozilish, toʻlov va xabarnomalar — mijozlaringiz har kuni ochadigan ilova ichida.',
     icon: '<path d="M21 4 3 11l6.5 2.2L19 7l-7.2 7.3.4 5.7 3.3-4.1L19.5 19z"/>',
   },
   {
-    title: 'CRM va admin panellar',
+    title: 'CRM tizimlar',
     text: 'Mijozlar, buyurtmalar va hisobotlar bitta joyda. Excel va daftarlar oʻrniga.',
     icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 15h7M14 18h5M14 21h7"/>',
   },
   {
     title: 'AI yordamchilar',
-    text: 'Mijozlarga javob beradigan bot, arizalarni saralash, hisobotlar boʻyicha oddiy tilda savol-javob.',
+    text: 'Mijozlarga kecha-kunduz javob beradigan bot, arizalarni saralash, hisobotlar boʻyicha savol-javob.',
     icon: '<path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/>',
     accent: true,
   },
@@ -49,40 +49,31 @@ const jsonLd = {
 };
 ---
 <Base title="Akbarov Labs — saytlar, Telegram botlar va AI" jsonLd={jsonLd}>
-  <!-- [01] Hero -->
-  <section class="rule">
-    <div class="mono strip rule">
-      <span>[01] IT VA AI STUDIYA</span>
-      <span>Oʻzbekiston — 2026</span>
-    </div>
-    <div class="hero">
-      <h1 class="huge hero-title">
-        <span>sayt.</span><br /><span>bot.</span><br /><span>ai.</span><Spark size="0.32em" class="hero-spark" />
-      </h1>
-      <div class="hero-side">
-        <p class="lead">{site.description}</p>
-        <div class="tags">
-          <span class="tag">Veb-saytlar</span>
-          <span class="tag">Telegram botlar</span>
-          <span class="tag">Mini App</span>
-          <span class="tag">CRM</span>
-          <span class="tag">AI</span>
-        </div>
-        <div class="row">
-          <a href="#aloqa" class="btn btn-accent">Loyihani muhokama qilish</a>
-          <a href="#ishlar" class="btn btn-outline">Ishlarimiz</a>
-        </div>
+  <!-- Hero: headline and the assistant's sample chat -->
+  <section class="wrap hero">
+    <div class="hero-text">
+      <p class="label">IT va AI ustaxonasi · Oʻzbekiston</p>
+      <h1>Raqamli ustaxona.</h1>
+      <p class="lead">
+        Usta kabi ishlaymiz: saytlar, Telegram botlar va biznes tizimlarini oʻlchab, puxta quramiz — va ularga sunʼiy
+        intellektni ulab beramiz.
+      </p>
+      <div class="row">
+        <a href="#aloqa" class="btn btn-primary">Loyihani muhokama qilish</a>
+        <a href="#ishlar" class="btn btn-outline">Ishlarimiz</a>
       </div>
+      <p class="hint"><span class="dot" aria-hidden="true"></span>Yonidagi yordamchi — bizning birinchi AI mahsulotimiz.</p>
+    </div>
+    <div class="hero-panel">
+      <Girih id="g-hero" opacity={0.9} />
+      <ChatDemo />
     </div>
   </section>
 
-  <!-- [02] Services -->
-  <section id="xizmatlar" class="rule">
-    <div class="section-head">
-      <h2>Nima quramiz</h2>
-      <span class="mono">[02] XIZMATLAR</span>
-    </div>
-    <div class="services">
+  <!-- Services -->
+  <section id="xizmatlar" class="services-band" aria-labelledby="xizmatlar-title">
+    <h2 id="xizmatlar-title" class="sr-only">Xizmatlar</h2>
+    <div class="wrap services">
       {services.map((s) => (
         <div class="service">
           <div class:list={['icon', { 'icon-accent': s.accent }]}>
@@ -95,20 +86,20 @@ const jsonLd = {
     </div>
   </section>
 
-  <!-- [03] Work log -->
-  <section id="ishlar" class="rule">
+  <!-- Work -->
+  <section id="ishlar" class="wrap section">
     <div class="section-head">
-      <h2>Ishga tushirilganlar</h2>
-      <span class="mono">[03] LABORATORIYA JURNALI</span>
+      <div>
+        <p class="label">Ishga tushirilganlar</p>
+        <h2>Ustaxonadan chiqqan ishlar</h2>
+      </div>
     </div>
-    <article class="log">
-      <dl class="log-meta">
-        <div><dt>LOG</dt><dd>001</dd></div>
-        <div><dt>TURI</dt><dd>Telegram bot + Mini App</dd></div>
-        <div><dt>HOLAT</dt><dd class="live"><span class="dot"></span>Ishlamoqda</dd></div>
-        <div><dt>TILLAR</dt><dd>Oʻzbek, rus, ingliz</dd></div>
-      </dl>
-      <div class="log-text">
+    <article class="work">
+      <div class="work-pic">
+        <Image src={kitoblarim} alt="Kitoblarim logotipi: “Har bir kitob oʻz javonida.”" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 640px" />
+      </div>
+      <div class="work-text">
+        <p class="meta"><span class="live" aria-hidden="true"></span>Ishlamoqda · Telegram bot + Mini App · 3 tilda</p>
         <h3>Kitoblarim</h3>
         <p>
           Boshlagan kitobingizni oxirigacha oʻqishga yordam beradigan bepul Telegram ilova. Tugatish sanasini tanlaysiz —
@@ -122,195 +113,223 @@ const jsonLd = {
         </ul>
         <a href="https://t.me/kitob_javonim_bot" class="ext" rel="noopener">@kitob_javonim_bot →</a>
       </div>
-      <div class="log-pic">
-        <Image src={kitoblarim} alt="Kitoblarim logotipi: “Har bir kitob oʻz javonida.”" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 480px" />
-      </div>
     </article>
     <a href="#aloqa" class="next">
-      <span class="mono">002</span>
-      <span class="next-text">Keyingi yozuv — sizning loyihangiz.</span>
+      <span class="next-text">Keyingi ish — sizning loyihangiz.</span>
       <span class="next-arrow" aria-hidden="true">→</span>
     </a>
   </section>
 
-  <!-- [04] AI -->
-  <section class="dark">
-    <div class="ai">
+  <!-- AI -->
+  <section class="ai">
+    <Girih id="g-ai" tile={120} star="var(--white)" hole="var(--lapis)" dot="var(--white)" opacity={0.09} />
+    <div class="wrap ai-inner">
       <div class="ai-text">
-        <span class="mono accent-on-dark">[04] SUNʼIY INTELLEKT</span>
-        <h2>AI bilan tezroq ishlaymiz — va sizga ham oʻrnatib beramiz</h2>
+        <p class="label">Sunʼiy intellekt</p>
+        <h2 class="h2">AI bilan tezroq ishlaymiz — va sizga ham oʻrnatib beramiz</h2>
         <p>
           Har bir loyihada Claude kabi zamonaviy AI vositalaridan foydalanamiz: kod tezroq yoziladi, koʻproq tekshiriladi va
           siz natijani ertaroq koʻrasiz.
         </p>
       </div>
       <ul class="ai-list">
-        <li><Spark size="22" fill="var(--copper-on-dark)" />Mijozlarga kecha-kunduz javob beradigan Telegram yordamchi</li>
-        <li><Spark size="22" fill="var(--copper-on-dark)" />Ariza va hujjatlarni avtomatik saralash</li>
-        <li><Spark size="22" fill="var(--copper-on-dark)" />Sotuv va hisobotlar boʻyicha oddiy tilda savol-javob</li>
+        <li>Mijozlarga kecha-kunduz javob beradigan Telegram yordamchi</li>
+        <li>Ariza va hujjatlarni avtomatik saralash</li>
+        <li>Sotuv va hisobotlar boʻyicha oddiy tilda savol-javob</li>
       </ul>
     </div>
   </section>
 
-  <!-- [05] Founder -->
-  <section class="founder rule">
+  <!-- Founder -->
+  <section class="wrap section founder">
     <div class="founder-pic">
       {site.founderPhoto ? (
         <img src={site.founderPhoto} alt={site.founder} loading="lazy" />
       ) : (
-        <Mark size={160} />
+        <>
+          <Girih id="g-founder" tile={80} star="var(--lapis)" hole="var(--mist)" dot="var(--saffron)" opacity={0.25} />
+          <span class="founder-mark"><Mark size={150} /></span>
+        </>
       )}
     </div>
     <div class="founder-text">
-      <span class="mono">[05] KIM QURADI</span>
+      <p class="label">Kim quradi</p>
       <blockquote>“Siz menejer bilan emas, kodni yozadigan odam bilan gaplashasiz.”</blockquote>
-      <div class="founder-sign">
-        <p>Har bir loyihani oʻzim boshqaraman. Natijani har hafta koʻrsatib boraman.</p>
-        <p class="mono ink">{site.founder.toUpperCase()} — ASOSCHI</p>
-      </div>
+      <p>Har bir loyihani oʻzim boshqaraman. Natijani har hafta koʻrsatib boraman.</p>
+      <p class="sign">{site.founder} — asoschi</p>
     </div>
   </section>
 
-  <!-- [06] Prices -->
-  <section id="narxlar" class="rule">
-    <div class="section-head">
-      <h2>Narxlar</h2>
-      <span class="mono">[06] BOSHLANGʻICH NARXLAR</span>
-    </div>
-    <div class="plans">
-      {plans.map((p) => (
-        <div class:list={['plan', { 'plan-dark': p.featured }]}>
-          <div class="plan-head">
-            <h3>{p.name}</h3>
-            {p.featured && <span class="badge">Koʻp soʻraladi</span>}
-          </div>
-          {p.price ? (
-            <p class="price">{p.price} <span>soʻmdan</span></p>
-          ) : (
-            <p class="price price-ask">Narxi suhbatda aniqlanadi</p>
-          )}
-          <ul>
-            {p.items.map((i) => <li>— {i}</li>)}
-          </ul>
-          {p.term && <p class="mono term">MUDDAT: {p.term.toUpperCase()}</p>}
+  <!-- Prices -->
+  <section id="narxlar" class="prices-band">
+    <div class="wrap section">
+      <div class="section-head">
+        <div>
+          <p class="label">Narxlar</p>
+          <h2>Boshlangʻich narxlar</h2>
         </div>
-      ))}
+      </div>
+      <div class="plans">
+        {plans.map((p) => (
+          <div class:list={['plan', { 'plan-dark': p.featured }]}>
+            <div class="plan-head">
+              <h3>{p.name}</h3>
+              {p.featured && <span class="badge">Koʻp soʻraladi</span>}
+            </div>
+            {p.price ? (
+              <p class="price">{p.price} <span>soʻmdan</span></p>
+            ) : (
+              <p class="price price-ask">Narxi suhbatda aniqlanadi</p>
+            )}
+            <ul>
+              {p.items.map((i) => <li>{i}</li>)}
+            </ul>
+            {p.term && <p class="term">Muddat: {p.term}</p>}
+          </div>
+        ))}
+      </div>
     </div>
   </section>
 
   <!-- Blog -->
   {posts.length > 0 && (
-    <section id="blog" class="rule">
+    <section id="blog" class="wrap section">
       <div class="section-head">
-        <h2>Blogdan</h2>
+        <div>
+          <p class="label">Blog</p>
+          <h2>Blogdan</h2>
+        </div>
         <a href="/blog/" class="all">Barcha maqolalar →</a>
       </div>
       {posts.length === 1 ? (
-        <div class="blog-one"><Featured post={posts[0]} /></div>
+        <Featured post={posts[0]} label="Yangi" />
       ) : (
         <div class="blog-grid">{posts.map((p) => <PostCard post={p} />)}</div>
       )}
     </section>
   )}
 
-  <!-- [07] Contact -->
-  <section id="aloqa" class="dark">
-    <div class="mono contact-label">[07] ALOQA</div>
-    <div class="contact">
-      <h2 class="huge">yozing.</h2>
-      <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
-      <div class="contact-links">
-        <a href={contactHref} class="btn btn-accent">{contactLabel}</a>
-        {site.telegram && <a href={`mailto:${site.email}`}>{site.email}</a>}
-        {site.instagram && <a href={`https://instagram.com/${site.instagram}`} rel="noopener">@{site.instagram}</a>}
+  <!-- Contact -->
+  <section id="aloqa" class="contact dark">
+    <div class="wrap contact-inner">
+      <div class="contact-text">
+        <p class="label">Aloqa</p>
+        <h2>Yozing.</h2>
+        <p>Vazifani birga koʻrib chiqamiz va narxini aytamiz.</p>
+        <div class="contact-links">
+          <a href={contactHref} class="btn btn-saffron">{contactLabel}</a>
+          {site.telegram && <a href={`mailto:${site.email}`}>{site.email}</a>}
+          {site.instagram && <a href={`https://instagram.com/${site.instagram}`} rel="noopener">@{site.instagram}</a>}
+        </div>
+      </div>
+      <div class="contact-tile" aria-hidden="true">
+        <Girih id="g-contact" tile={110} hole="var(--ink)" dot="var(--lapis)" opacity={0.9} />
       </div>
     </div>
   </section>
-
-  <Footer slot="footer" />
 </Base>
 
 <style>
-  .strip {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 8px 24px;
-    padding: 18px var(--gutter);
-  }
   .hero {
     display: flex;
     flex-wrap: wrap;
+    gap: 48px 56px;
     align-items: stretch;
+    padding-block: 48px 80px;
   }
-  .hero-title {
-    flex: 1 1 620px;
+  .hero-text {
+    flex: 1 1 520px;
     min-width: 0;
-    padding: 32px var(--gutter) 40px;
-  }
-  .hero-title :global(.hero-spark) {
-    vertical-align: top;
-    margin-left: 0.04em;
-    margin-top: 0.06em;
-  }
-  .hero-side {
-    flex: 1 1 400px;
-    min-width: 0;
-    padding: 40px 32px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
-    gap: 24px;
-    border-left: 1px solid var(--line);
+    justify-content: center;
+    gap: 28px;
+  }
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(48px, 6.2vw, 88px);
+    line-height: 1.02;
+    letter-spacing: -2px;
   }
   .lead {
     margin: 0;
     font-size: 21px;
-    line-height: 1.5;
+    line-height: 1.55;
+    color: var(--body);
+    max-width: 580px;
   }
-  .tags,
   .row {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
-  }
-  .row {
     gap: 12px;
   }
+  .hint {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--body);
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--saffron);
+  }
+  .hero-panel {
+    position: relative;
+    flex: 1 1 520px;
+    min-width: 0;
+    max-width: 640px;
+    border-radius: 28px;
+    background: var(--lapis);
+    overflow: hidden;
+    padding: 48px 40px;
+    display: flex;
+    align-items: center;
+  }
 
+  .services-band {
+    border-block: 1px solid var(--line);
+  }
   .services {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    border-top: 1px solid var(--line);
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   }
   .service {
-    padding: 32px var(--gutter);
+    padding: 36px 28px 44px;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    border-right: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    margin-bottom: -1px;
+    gap: 12px;
+    border-left: 1px solid var(--line);
+  }
+  .service:first-child {
+    border-left: 0;
+    padding-left: 0;
   }
   .icon {
-    width: 48px;
-    height: 48px;
+    width: 52px;
+    height: 52px;
     border-radius: 14px;
-    background: var(--ink);
-    color: var(--cream);
+    background: var(--mist);
+    color: var(--lapis);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   .icon-accent {
-    background: var(--copper);
-    color: #fff;
+    background: var(--saffron);
+    color: var(--ink);
   }
   .service h3 {
-    margin: 0;
-    font-size: 22px;
-    font-weight: 700;
-    letter-spacing: -0.3px;
+    margin: 4px 0 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 20px;
   }
   .service p {
     margin: 0;
@@ -319,62 +338,59 @@ const jsonLd = {
     color: var(--body);
   }
 
-  .log {
+  .work {
     display: flex;
     flex-wrap: wrap;
-    border-top: 1px solid var(--line);
-  }
-  .log-meta {
-    flex: 0 1 220px;
-    margin: 0;
-    padding: 28px var(--gutter);
-    font-family: var(--mono);
-    font-size: 13px;
-    line-height: 1.6;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
-  .log-meta dt {
-    color: var(--muted);
-  }
-  .log-meta dd {
-    margin: 0;
-  }
-  .live {
-    display: flex;
+    gap: 40px 56px;
     align-items: center;
-    gap: 8px;
   }
-  .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--copper);
-  }
-  .log-text {
-    flex: 1 1 340px;
+  .work-pic {
+    flex: 1 1 480px;
     min-width: 0;
-    padding: 28px var(--gutter);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #161c19;
+  }
+  .work-pic :global(img) {
+    width: 100%;
+    height: auto;
+  }
+  .work-text {
+    flex: 1 1 420px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 16px;
-    border-left: 1px solid var(--line);
   }
-  .log-text h3 {
+  .meta {
     margin: 0;
-    font-size: clamp(40px, 5vw, 60px);
-    line-height: 1;
-    letter-spacing: -0.04em;
-    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
   }
-  .log-text p {
+  .live {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #1f9d55;
+  }
+  .work-text h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(36px, 4vw, 52px);
+    letter-spacing: -1px;
+  }
+  .work-text p:not(.meta) {
     margin: 0;
     font-size: 18px;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--body);
   }
-  .log-text ul {
+  .work-text ul {
     margin: 0;
     padding-left: 20px;
     font-size: 16px;
@@ -384,40 +400,34 @@ const jsonLd = {
     flex-direction: column;
     gap: 6px;
   }
+  .work-text li::marker {
+    color: var(--saffron);
+  }
   .ext {
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 8px 0;
     align-self: flex-start;
-  }
-  .log-pic {
-    flex: 1 1 400px;
-    min-width: 0;
-    margin: var(--gutter);
-    border-radius: 20px;
-    overflow: hidden;
-    background: #161c19;
-    display: flex;
-    align-items: center;
-  }
-  .log-pic :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    font-weight: 600;
+    padding: 8px 0;
   }
   .next {
+    margin-top: 48px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 20px;
-    padding: 28px var(--gutter);
-    border-top: 1px solid var(--line);
+    padding: 28px 32px;
+    border-radius: var(--radius);
+    border: 2px dashed var(--line-strong);
+    color: var(--ink);
     text-decoration: none;
   }
+  .next:hover {
+    border-color: var(--lapis);
+    color: var(--lapis);
+  }
   .next-text {
-    flex: 1;
-    font-size: 24px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 22px;
   }
   .next-arrow {
     font-size: 28px;
@@ -428,7 +438,17 @@ const jsonLd = {
   }
 
   .ai {
-    padding: 80px var(--gutter);
+    position: relative;
+    overflow: hidden;
+    background: var(--lapis);
+    color: var(--white);
+  }
+  .ai .label {
+    color: var(--saffron);
+  }
+  .ai-inner {
+    position: relative;
+    padding-block: 96px;
     display: flex;
     flex-wrap: wrap;
     gap: 48px;
@@ -439,23 +459,13 @@ const jsonLd = {
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
   }
-  .accent-on-dark {
-    color: var(--copper-on-dark) !important;
-  }
-  .ai h2 {
-    margin: 0;
-    font-size: clamp(32px, 4vw, 48px);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    font-weight: 700;
-  }
-  .ai-text p {
+  .ai-text p:not(.label) {
     margin: 0;
     font-size: 18px;
     line-height: 1.6;
-    color: var(--body-on-dark);
+    color: var(--on-dark);
   }
   .ai-list {
     flex: 1 1 380px;
@@ -468,84 +478,97 @@ const jsonLd = {
     gap: 12px;
   }
   .ai-list li {
-    border: 1px solid rgba(243, 239, 230, 0.18);
+    background: var(--white);
+    color: var(--ink);
     border-radius: 16px;
-    padding: 20px 22px;
-    display: flex;
-    gap: 14px;
-    align-items: flex-start;
+    padding: 20px 22px 20px 56px;
     font-size: 17px;
     line-height: 1.45;
+    position: relative;
   }
-  .ai-list :global(svg) {
-    flex: none;
-    margin-top: 1px;
+  .ai-list li::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 24px;
+    width: 14px;
+    height: 14px;
+    background: var(--saffron);
+    transform: rotate(45deg);
+    border-radius: 2px;
   }
 
   .founder {
     display: flex;
     flex-wrap: wrap;
+    gap: 40px 64px;
+    align-items: stretch;
   }
   .founder-pic {
+    position: relative;
     flex: 1 1 340px;
     min-width: 0;
-    min-height: 400px;
-    background: var(--sand);
+    min-height: 420px;
+    border-radius: var(--radius);
+    background: var(--mist);
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
   }
   .founder-pic img {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
+  .founder-mark {
+    position: relative;
+    width: 220px;
+    height: 220px;
+    border-radius: 40px;
+    background: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .founder-text {
-    flex: 2 1 560px;
+    flex: 2 1 520px;
     min-width: 0;
-    padding: 56px var(--gutter) 48px 48px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 28px;
-    border-left: 1px solid var(--line);
+    justify-content: center;
+    gap: 22px;
   }
   blockquote {
     margin: 0;
-    font-family: var(--serif);
-    font-style: italic;
-    font-weight: 400;
-    font-size: clamp(30px, 3.6vw, 46px);
-    line-height: 1.15;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.2vw, 42px);
+    line-height: 1.2;
+    letter-spacing: -0.5px;
   }
-  .founder-sign {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    max-width: 620px;
-  }
-  .founder-sign p {
+  .founder-text p:not(.label) {
     margin: 0;
-    font-size: 17px;
+    font-size: 18px;
     line-height: 1.6;
     color: var(--body);
   }
-  .founder-sign .ink {
+  .founder-text .sign {
     color: var(--ink);
-    font-size: 13px;
+    font-weight: 600;
   }
 
+  .prices-band {
+    background: var(--mist);
+  }
   .plans {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 16px;
-    padding: 0 var(--gutter) 64px;
+    gap: 20px;
   }
   .plan {
-    background: #fff;
-    border: 1px solid rgba(31, 30, 27, 0.1);
-    border-radius: 24px;
+    background: var(--white);
+    border-radius: var(--radius);
     padding: 32px;
     display: flex;
     flex-direction: column;
@@ -553,8 +576,7 @@ const jsonLd = {
   }
   .plan-dark {
     background: var(--ink);
-    color: var(--cream);
-    border-color: var(--ink);
+    color: var(--white);
   }
   .plan-head {
     display: flex;
@@ -564,33 +586,34 @@ const jsonLd = {
   }
   .plan h3 {
     margin: 0;
+    font-family: var(--display);
+    font-weight: 500;
     font-size: 20px;
-    font-weight: 700;
   }
   .badge {
+    background: var(--saffron);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 6px 10px;
     font-size: 13px;
-    font-weight: 500;
-    background: var(--copper);
-    color: #fff;
-    border-radius: 999px;
-    padding: 6px 12px;
+    font-weight: 600;
     white-space: nowrap;
   }
   .price {
     margin: 0;
-    font-size: 34px;
+    font-family: var(--display);
     font-weight: 700;
-    letter-spacing: -0.8px;
+    font-size: 30px;
   }
   .price span {
+    font-family: var(--sans);
     font-size: 16px;
     font-weight: 500;
     color: var(--muted);
   }
   .price-ask {
-    font-size: 24px;
-    letter-spacing: -0.4px;
-    line-height: 1.2;
+    font-size: 22px;
+    line-height: 1.25;
   }
   .plan ul {
     margin: 0;
@@ -602,48 +625,75 @@ const jsonLd = {
     font-size: 16px;
     color: var(--body);
   }
+  .plan li {
+    padding-left: 22px;
+    position: relative;
+  }
+  .plan li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 7px;
+    width: 8px;
+    height: 8px;
+    background: var(--lapis);
+    transform: rotate(45deg);
+  }
   .plan-dark ul {
-    color: var(--body-on-dark);
+    color: var(--on-dark);
+  }
+  .plan-dark li::before {
+    background: var(--saffron);
   }
   .plan-dark .price span,
   .plan-dark .term {
-    color: var(--muted-on-dark);
+    color: var(--on-dark);
   }
   .term {
     margin: auto 0 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--muted);
   }
 
   .all {
-    font-weight: 500;
-    font-size: 16px;
+    font-weight: 600;
     padding: 12px 0;
-  }
-  .blog-one {
-    border-top: 1px solid var(--line);
   }
   .blog-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    border-top: 1px solid var(--line);
-    margin-bottom: -1px;
+    gap: 40px 32px;
   }
 
-  .contact-label {
-    padding: var(--gutter);
-    border-bottom: 1px solid var(--line-on-dark);
+  .contact-inner {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 48px;
+    align-items: stretch;
+    padding-block: 96px;
   }
-  .contact {
-    padding: 48px var(--gutter) 64px;
+  .contact-text {
+    flex: 1 1 520px;
+    min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 24px;
   }
-  .contact p {
+  .contact h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(64px, 10vw, 140px);
+    line-height: 0.95;
+    letter-spacing: -3px;
+  }
+  .contact-text p:not(.label) {
     margin: 0;
     font-size: 19px;
     line-height: 1.55;
-    color: var(--body-on-dark);
-    max-width: 560px;
+    color: var(--on-dark);
+    max-width: 520px;
   }
   .contact-links {
     display: flex;
@@ -655,44 +705,55 @@ const jsonLd = {
   .contact-links a:not(.btn) {
     padding: 12px 0;
   }
+  .contact-tile {
+    position: relative;
+    flex: 0 1 360px;
+    min-height: 280px;
+    border-radius: var(--radius);
+    background: var(--lapis);
+    overflow: hidden;
+  }
 
-  @media (max-width: 640px) {
-    .hero-title {
-      padding-bottom: 24px;
+  @media (max-width: 760px) {
+    .hero {
+      padding-block: 28px 48px;
     }
-    .hero-side {
-      border-left: 0;
-      border-top: 1px solid var(--line);
-      padding: 28px var(--gutter) 32px;
+    h1 {
+      letter-spacing: -1px;
     }
     .lead {
-      font-size: 19px;
+      font-size: 18px;
     }
-    .log-text,
-    .founder-text {
+    .hero-panel {
+      padding: 24px 14px;
+      border-radius: 22px;
+    }
+    .service {
       border-left: 0;
       border-top: 1px solid var(--line);
+      padding: 28px 0;
     }
-    .log-meta {
-      flex-basis: 100%;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 12px 28px;
+    .service:first-child {
+      border-top: 0;
+    }
+    .next {
+      padding: 22px 20px;
+    }
+    .next-text {
+      font-size: 18px;
+    }
+    .ai-inner,
+    .contact-inner {
+      padding-block: 64px;
     }
     .founder-pic {
-      min-height: 260px;
-    }
-    .founder-text {
-      padding: 40px var(--gutter);
+      min-height: 280px;
     }
     .plan {
       padding: 24px;
     }
-    .next-text {
-      font-size: 20px;
-    }
-    .ai {
-      padding: 56px var(--gutter);
+    .contact-tile {
+      display: none;
     }
   }
   @media (prefers-reduced-motion: reduce) {

@@ -14,28 +14,32 @@ const links = [
   { href: '/blog/', label: 'Blog', active: current === 'blog' },
 ];
 ---
-<header class="rule">
-  <nav aria-label="Asosiy menyu" class="nav">
+<header class="head">
+  <nav aria-label="Asosiy menyu" class="wrap nav">
     <a href="/" class="brand" aria-label="Akbarov Labs — bosh sahifa">
-      <Mark size={32} />
-      <span>akbarov <span class="labs">labs</span></span>
+      <Mark size={34} />
+      <span>akbarov labs</span>
     </a>
     <div class="links">
       {links.map((l) => (
         <a href={l.href} aria-current={l.active ? 'page' : undefined}>{l.label}</a>
       ))}
     </div>
-    <a href={`${home}#aloqa`} class="btn btn-ink btn-sm cta">Bogʻlanish</a>
+    <a href={`${home}#aloqa`} class="btn btn-primary btn-sm">Bogʻlanish</a>
   </nav>
 </header>
 
 <style>
+  .head {
+    border-bottom: 1px solid var(--line);
+    background: var(--white);
+  }
   .nav {
-    padding: 12px var(--gutter);
+    padding-block: 14px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 4px 32px;
+    gap: 4px 40px;
   }
   .brand {
     display: flex;
@@ -43,42 +47,50 @@ const links = [
     gap: 10px;
     text-decoration: none;
     color: var(--ink);
+    font-family: var(--display);
     font-weight: 700;
-    font-size: 20px;
-    letter-spacing: -0.4px;
-    padding: 8px 0;
+    font-size: 18px;
+    padding: 6px 0;
   }
-  .labs {
-    font-weight: 500;
-    color: var(--muted);
+  .brand:hover {
+    color: var(--ink);
   }
   .links {
     display: flex;
     flex-wrap: wrap;
-    gap: 0 24px;
+    gap: 0 32px;
     flex: 1 1 auto;
-    justify-content: center;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
   }
   .links a {
+    color: var(--ink);
     text-decoration: none;
     padding: 12px 0;
   }
-  .links a[aria-current='page'] {
-    text-decoration: underline;
-    text-underline-offset: 6px;
-    text-decoration-thickness: 2px;
+  .links a:hover {
+    color: var(--lapis);
   }
-  @media (max-width: 640px) {
+  .links a[aria-current='page'] {
+    color: var(--lapis);
+    text-decoration: underline;
+    text-decoration-color: var(--saffron);
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
+  }
+  @media (max-width: 760px) {
     .nav {
       justify-content: space-between;
+    }
+    .brand {
+      font-size: 16px;
     }
     .links {
       order: 3;
       flex-basis: 100%;
       justify-content: space-between;
       gap: 0 12px;
+      font-size: 15px;
     }
   }
 </style>

@@ -1,17 +1,21 @@
 ---
 import PostThumb from './PostThumb.astro';
-import { formatDate, postUrl, readingMinutes, type Post } from '../data/blog';
+import { formatDate, postUrl, readingMinutes, topics, type Post } from '../data/blog';
 
 interface Props {
   post: Post;
   label?: string;
 }
 const { post, label } = Astro.props;
+const topic = topics.find((t) => t.id === post.data.topic)?.label ?? post.data.topic;
 ---
 <a href={postUrl(post)} class="featured">
-  <div class="pic"><PostThumb topic={post.data.topic} height="100%" /></div>
+  <div class="pic"><PostThumb topic={post.data.topic} id={`g-feat-${post.id}`} height="100%" /></div>
   <div class="text">
-    <span class="mono meta">{label && `${label} · `}{post.data.topic} · {formatDate(post.data.published).toUpperCase()} · {readingMinutes(post.body)} DAQ</span>
+    <span class="meta">
+      {label && <span class="new">{label}</span>}
+      <span class="topic">{topic}</span> · {formatDate(post.data.published)} · {readingMinutes(post.body)} daq
+    </span>
     <h2>{post.data.title}</h2>
     <p>{post.data.description}</p>
     <span class="more">Oʻqish →</span>
@@ -22,55 +26,72 @@ const { post, label } = Astro.props;
   .featured {
     display: flex;
     flex-wrap: wrap;
+    gap: 32px 48px;
+    align-items: center;
     text-decoration: none;
+    color: var(--ink);
+  }
+  .featured:hover {
     color: var(--ink);
   }
   .pic {
     flex: 1 1 480px;
     min-width: 0;
-    height: 360px;
-    margin: var(--gutter);
+    height: 380px;
   }
   .text {
     flex: 1 1 360px;
     min-width: 0;
-    padding: 32px var(--gutter) 40px 8px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
     gap: 16px;
   }
   .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .new {
+    background: var(--saffron);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 4px 8px;
+    font-weight: 600;
     font-size: 12px;
+    text-transform: uppercase;
+    margin-right: 4px;
+  }
+  .topic {
+    color: var(--lapis);
+    font-weight: 600;
   }
   h2 {
     margin: 0;
-    font-size: clamp(28px, 3.4vw, 44px);
-    line-height: 1.1;
-    letter-spacing: -0.03em;
+    font-family: var(--display);
     font-weight: 700;
+    font-size: clamp(26px, 3vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
   }
   .featured:hover h2 {
-    color: var(--copper-dark);
+    color: var(--lapis);
   }
   p {
     margin: 0;
     font-size: 17px;
-    line-height: 1.55;
+    line-height: 1.6;
     color: var(--body);
   }
   .more {
-    font-weight: 500;
-    text-decoration: underline;
-    text-underline-offset: 4px;
+    font-weight: 600;
+    color: var(--lapis);
   }
-  @media (max-width: 640px) {
+  @media (max-width: 760px) {
     .pic {
       height: 220px;
-      margin-bottom: 0;
-    }
-    .text {
-      padding: 20px var(--gutter) 32px;
     }
   }
 </style>

@@ -1,34 +1,64 @@
 ---
 import Base from '../layouts/Base.astro';
-import Footer from '../components/Footer.astro';
+import Girih from '../components/Girih.astro';
 ---
-<Base title="Sahifa topilmadi — Akbarov Labs" current="other">
+<Base title="Sahifa topilmadi — Akbarov Labs" current="other" noindex>
   <section class="nf">
-    <span class="mono">[404] TOPILMADI</span>
-    <h1 class="huge">yoʻq.</h1>
-    <p>Bu sahifa koʻchirilgan yoki hech qachon boʻlmagan.</p>
-    <div class="row">
-      <a href="/" class="btn btn-ink">Bosh sahifa</a>
-      <a href="/blog/" class="btn btn-outline">Blog</a>
+    <Girih id="g-404" tile={100} star="var(--white)" hole="var(--lapis)" dot="var(--white)" opacity={0.09} />
+    <div class="wrap inner">
+      <p class="label">404</p>
+      <h1>Bu sahifa topilmadi.</h1>
+      <p>U koʻchirilgan yoki hech qachon boʻlmagan.</p>
+      <div class="row">
+        <a href="/" class="btn btn-saffron">Bosh sahifa</a>
+        <a href="/blog/" class="btn btn-ghost">Blog</a>
+      </div>
     </div>
   </section>
-  <Footer slot="footer" />
 </Base>
 
 <style>
   .nf {
-    padding: 48px var(--gutter) 80px;
+    position: relative;
+    overflow: hidden;
+    background: var(--lapis);
+    color: var(--white);
+  }
+  .nf .label {
+    color: var(--saffron);
+  }
+  .inner {
+    position: relative;
+    padding-block: 120px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
   }
-  p {
+  h1 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -1.5px;
+  }
+  .inner p:not(.label) {
     margin: 0;
     font-size: 20px;
+    color: var(--on-dark);
   }
   .row {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    margin-top: 12px;
+  }
+  .btn-ghost {
+    border-color: var(--white);
+    color: var(--white);
+  }
+  .btn-ghost:hover {
+    background: var(--white);
+    color: var(--lapis);
   }
 </style>

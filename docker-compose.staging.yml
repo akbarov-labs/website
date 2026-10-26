@@ -1,0 +1,29 @@
+# Staging copy of docker-compose.prod.yml, for the same server. Lives at
+# /opt/apps/akbarovlabs-staging/docker-compose.staging.yml, root-owned, next
+# to staging's own .env (set up by `sudo add-app`; see DEPLOY.md).
+#
+# Same image as production — CI deploys each build here first, and
+# production gets that exact tag only after "Promote to production". What
+# differs: its own container name, no www address, and a login prompt in
+# front of every page so search engines and visitors never see it.
+#
+# add-app replaces STAGING_AUTH_HASH with the real password hash.
+
+services:
+  web:
+    image: ${IMAGE:-ghcr.io/akbarov-labs/website}:${IMAGE_TAG:-latest}
+    container_name: akbarovlabs-staging-web
+    restart: unless-stopped
+    env_file: .env
+    mem_limit: 64m
+    networks:
+      - edge
+    labels:
+      caddy: ${DOMAIN:?set DOMAIN in .env, e.g. akbarovlabs.staging.sarvarlogs.uz}
+      # Username "staging"; the password is whatever add-app hashed.
+      caddy.basic_auth.staging: STAGING_AUTH_HASH
+      caddy.reverse_proxy: "{{upstreams 80}}"
+
+networks:
+  edge:
+    external: true

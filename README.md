@@ -1,6 +1,8 @@
 # akbarovlabs.uz
 
-The Akbarov Labs website: home page and blog. Built with Astro as a static site, hosted on Cloudflare Pages.
+The Akbarov Labs website: home page and blog. Built with Astro as a static site, served by nginx in Docker on our own server, with Cloudflare in front.
+
+Design system A, "Ustaxona": lapis `#1E3A8A`, saffron `#F2B33D`, ink `#121826`, mist `#EEF1F7` on white; Unbounded for headings, Onest for text; girih (eight-point star) patterns. Tokens live in `src/styles/global.css`.
 
 ## Run locally
 
@@ -39,12 +41,8 @@ Matn...
 
 `##` headings become the table of contents. Topic chips on /blog appear once posts cover more than one topic.
 
-## Deploy to Cloudflare Pages
+## Deploy
 
-1. Push this repo to GitHub.
-2. Cloudflare → Workers & Pages → Create → Pages → connect the repo.
-3. Framework preset: Astro. Build command `npm run build`, output directory `dist`.
-4. Custom domains: add `akbarovlabs.uz` and `www.akbarovlabs.uz`.
-5. Rules → Redirect Rules: `www.akbarovlabs.uz/*` → `https://akbarovlabs.uz/${1}`, 301.
-
-`public/_headers` sets security headers and long caching for built assets.
+The site runs on our own server behind Cloudflare: push to `main` → staging,
+then **Actions → Promote to production**. Setup and day-to-day steps:
+[DEPLOY.md](DEPLOY.md).

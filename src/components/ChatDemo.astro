@@ -1,0 +1,154 @@
+---
+// A sample conversation, clearly marked as one. The real AI assistant takes
+// this card's place later; until then the bottom row sends people to us.
+import Mark from './Mark.astro';
+import { contactHref, contactLabel } from '../data/site';
+
+const messages = [
+  { me: true, text: 'Salom! Klinikam uchun qabulga yozadigan bot kerak. Qancha vaqt ketadi?' },
+  { me: false, text: 'Salom! Muddat vazifaga bogʻliq — qisqa suhbatda aniq aytamiz. Shifokorlaringiz nechta va toʻlovni bot orqali olasizmi?' },
+  { me: true, text: '3 ta shifokor. Toʻlov hozircha kerak emas.' },
+  { me: false, text: 'Tushunarli. Arizangizni Sarvarga yubordim — u bugun oʻzi yozadi.' },
+];
+---
+<figure class="chat" aria-label="AI yordamchi bilan namuna suhbat">
+  <div class="top">
+    <span class="avatar"><Mark size={24} /></span>
+    <span class="who">
+      <span class="name">Ustaxona yordamchisi</span>
+      <span class="sub">AI · savollarga darhol javob beradi</span>
+    </span>
+    <span class="badge">Namuna</span>
+  </div>
+  <div class="msgs">
+    {messages.map((m) => <p class:list={['msg', m.me ? 'me' : 'bot']}>{m.text}</p>)}
+    <div class="chips">
+      <a href="#narxlar">Sayt narxi qancha?</a>
+      <a href="/blog/telegram-bot-qachon-kerak/">Bot nima qila oladi?</a>
+      <a href="#ishlar">Ishlaringizni koʻrsating</a>
+    </div>
+  </div>
+  <div class="bottom">
+    <span>AI yordamchi tez orada shu yerda javob beradi. Hozircha:</span>
+    <a href={contactHref} class="btn btn-primary btn-sm">{contactLabel}</a>
+  </div>
+</figure>
+
+<style>
+  .chat {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    background: var(--white);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 24px 60px rgba(18, 24, 38, 0.25);
+  }
+  .top {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .avatar {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    background: var(--mist);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .who {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+  .name {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 15px;
+  }
+  .sub {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .badge {
+    background: var(--saffron);
+    border-radius: 8px;
+    padding: 5px 9px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .msgs {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  .msg {
+    margin: 0;
+    max-width: 86%;
+    padding: 11px 15px;
+  }
+  .me {
+    align-self: flex-end;
+    background: var(--lapis);
+    color: var(--white);
+    border-radius: 16px 16px 4px 16px;
+  }
+  .bot {
+    align-self: flex-start;
+    background: var(--mist);
+    border-radius: 16px 16px 16px 4px;
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding-top: 6px;
+  }
+  .chips a {
+    border: 1.5px solid var(--line-strong);
+    border-radius: 999px;
+    padding: 9px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .chips a:hover {
+    border-color: var(--lapis);
+    color: var(--lapis);
+  }
+  .bottom {
+    padding: 14px 16px 14px 20px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  @media (max-width: 760px) {
+    .msgs {
+      padding: 16px;
+      font-size: 14px;
+    }
+    .msg {
+      max-width: 92%;
+    }
+    .bottom .btn {
+      width: 100%;
+    }
+  }
+</style>
