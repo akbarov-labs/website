@@ -1,15 +1,14 @@
 name: Deploy to an environment
 
-# One deploy, to whichever environment the caller names (deploy.yml calls it
-# for staging, then production). Kept separate so both run exactly the same
-# steps — the only difference is which environment's variables and key are
-# used, and that is GitHub's doing, not ours.
+# One deploy, to the environment the caller names (deploy.yml and promote.yml
+# both call it for production). Kept separate so both run exactly the same
+# steps, and the environment's variables and key are GitHub's doing, not ours.
 
 on:
   workflow_call:
     inputs:
       environment:
-        description: "GitHub environment: staging or production"
+        description: "GitHub environment: production"
         required: true
         type: string
       image_tag:
@@ -35,10 +34,10 @@ jobs:
     steps:
       # CI logs in as `deployer`, whose key can run exactly one thing on the
       # server: /usr/local/sbin/deploy-app <app> <tag> (forced command, see
-      # deploy/server/deploy-app and docs/add-app.md in akbarov-labs/reads). Each
-      # environment has its own key, pinned to its own app — the staging key
-      # can only ever deploy akbarovlabs-staging. Whatever we send as the
-      # "command" below arrives as the tag; the server checks it.
+      # deploy/server/deploy-app and docs/add-app.md in akbarov-labs/reads). The
+      # key is pinned to this app, so it can only ever deploy akbarovlabs.
+      # Whatever we send as the "command" below arrives as the tag; the server
+      # checks it.
       #
       # No checkout and no third-party action here: nothing but this
       # script ever touches the SSH key. The compose file is not copied
@@ -48,9 +47,8 @@ jobs:
       # Server address, user and host key are Actions *variables* (not
       # secrets — none of them is private). This repository is private, and
       # GitHub's free plan shares org variables with public ones only, so
-      # they are set on this repository. An environment can override them, e.g. when
-      # staging moves to its own server. Only the key is a secret, and it is
-      # this repo's own, per environment.
+      # they are set on this repository. Only the key is a secret, and it is
+      # this repo's own, on the production environment.
       - name: Deploy on the VPS
         env:
           CONTABO_USER: ${{ vars.CONTABO_USER }}

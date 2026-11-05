@@ -1,16 +1,15 @@
 name: Promote to production
 
-# Production deploys only when someone runs this by hand: Actions →
-# "Promote to production" → Run workflow. This repository is private, and
-# on GitHub's free plan private repositories have no "Required reviewers",
-# so this button is the approval step. deploy.yml puts every build on
-# staging; this takes the image staging already runs to production.
+# Deploys an already-built image to production by hand: Actions → "Promote
+# to production" → Run workflow. Without staging, deploy.yml already puts
+# every push on production, so this is the rollback button: give it an older
+# commit's full SHA and that build goes back on.
 
 on:
   workflow_dispatch:
     inputs:
       image_tag:
-        description: "Full commit SHA to promote. Leave empty for the latest commit on main (what staging runs once deploy.yml is green)."
+        description: "Full commit SHA to promote. Leave empty for the latest commit on main."
         required: false
         type: string
 

@@ -5,10 +5,9 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
-# Build once, then promote: every push to main becomes one image, which goes
-# to staging automatically. Production gets it only when someone runs
-# promote.yml ("Promote to production") by hand — this repository is
-# private, and GitHub's free plan offers no Required reviewers for it.
+# Build once, then deploy: every push to main becomes one image, which goes
+# straight to production (no staging, the same as random-bot and posbon).
+# promote.yml redeploys a chosen build by hand, which is the rollback button.
 # The image build runs `astro build`, so a broken page or bad blog post
 # front matter stops here, before anything is deployed.
 
@@ -47,12 +46,12 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy-staging:
+  deploy-production:
     needs: build
     uses: ./.github/workflows/deploy-to.yml
     permissions:
       packages: read
     with:
-      environment: staging
+      environment: production
       image_tag: ${{ github.sha }}
     secrets: inherit

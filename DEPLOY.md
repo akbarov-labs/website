@@ -1,16 +1,15 @@
 # Deploying akbarovlabs.uz
 
-The site runs on the Contabo server like the other projects: GitHub builds
-a Docker image, every push to `main` goes to **staging** automatically, and
-**production** gets that same image when you press **Actions → Promote to
-production → Run workflow**.
+The site runs on the Contabo server, production only (no staging), the same
+way as random-bot and posbon: GitHub builds a Docker image and every push to
+`main` goes straight to production.
 
-| | Production | Staging |
-|---|---|---|
-| Address | `https://akbarovlabs.uz` (+ `www` → redirect) | `https://akbarovlabs.staging.sarvarlogs.uz`, password protected (user `staging`) |
-| Folder on the server | `/opt/apps/akbarovlabs` | `/opt/apps/akbarovlabs-staging` |
-| Container | `akbarovlabs-web` | `akbarovlabs-staging-web` |
-| Deploys | Promote to production (by hand) | every push to `main` |
+| | Production |
+|---|---|
+| Address | `https://akbarovlabs.uz` (+ `www` → redirect) |
+| Folder on the server | `/opt/apps/akbarovlabs` |
+| Container | `akbarovlabs-web` |
+| Deploys | every push to `main` |
 
 The image is nginx serving the built files (see `Dockerfile` and
 `docker/nginx.conf`). No database and nothing to back up yet.
@@ -21,7 +20,9 @@ shared **edge Caddy** (HTTPS) → this container.
 The general server tools and docs live in `akbarov-labs/reads`:
 `docs/add-app.md` and `docs/cloudflare-real-ip.md`.
 
-## First-time setup
+## Setting up on a new server
+
+The current server is already set up. Only follow this to rebuild it.
 
 ### 1. Cloudflare DNS
 
@@ -30,66 +31,46 @@ Then in Cloudflare → **DNS → Records**:
 
 | Type | Name | Content | Proxy |
 |---|---|---|---|
-| A | `@` | `169.58.243.86` | **DNS only** (grey) for now |
+| A | `@` | the server's address | **DNS only** (grey) for now |
 | CNAME | `www` | `akbarovlabs.uz` | **DNS only** (grey) for now |
 
-Keep them grey until step 5, so Caddy can get its certificates directly.
+Keep them grey until step 4, so Caddy can get its certificates directly.
 
-### 2. Mac: keys and files for the server
+### 2. Server: create the app
 
-```bash
-cd ~/dev/sites/Reads
-deploy/prepare-app akbarovlabs ~/dev/sites/akbarovlabs
-```
+`sudo add-app` always sets up staging too, so it doesn't fit this app. Do the
+production half instead, using `infra/setup-server.sh` in
+`akbarov-labs/group-manager-bot` as the template:
 
-### 3. Server: create the app
+- Make a CI key on the Mac:
+  `ssh-keygen -q -t ed25519 -f ~/.ssh/ci_akbarovlabs -N "" -C ci_akbarovlabs`.
+- Set `APP=akbarovlabs` and `REPO=ghcr.io/akbarov-labs/website`, and require
+  only `DOMAIN` in the `.env`. The `.env` is one line:
+  `DOMAIN=akbarovlabs.uz`.
 
-This is a new app, so first give production its `.env` (add-app copies it
-from the folder you name):
-
-```bash
-mkdir -p /tmp/akbarovlabs-env && printf 'DOMAIN=akbarovlabs.uz\n' > /tmp/akbarovlabs-env/.env
-```
-
-```bash
-sudo add-app akbarovlabs ghcr.io/akbarov-labs/website /tmp/akbarovlabs-env
-```
-
-It asks for staging's password twice. Then:
-
-```bash
-rm -rf /tmp/akbarovlabs-env
-```
-
-### 4. GitHub
+### 3. GitHub
 
 The repository is private, so it can't see the org's variables. In
 **akbarov-labs/website → Settings → Secrets and variables → Actions →
-Variables**, add the same four as the other projects: `CONTABO_HOST`
-(`169.58.243.86`), `CONTABO_PORT` (`22`), `CONTABO_USER` (`deployer`),
-`CONTABO_KNOWN_HOSTS` (copy it from the org's Variables page).
+Variables**, add the same four as the other projects: `CONTABO_HOST`,
+`CONTABO_PORT` (`22`), `CONTABO_USER` (`deployer`), `CONTABO_KNOWN_HOSTS`
+(copy it from the org's Variables page).
 
-Then **Settings → Environments**:
+Then **Settings → Environments → `production`**: secret `CONTABO_SSH_KEY` =
+`pbcopy < ~/.ssh/ci_akbarovlabs`, variable `SITE_URL` =
+`https://akbarovlabs.uz`, Deployment branches → Selected → `main`.
 
-- **`staging`**: secret `CONTABO_SSH_KEY` = `pbcopy < ~/.ssh/ci_akbarovlabs_staging`,
-  variable `SITE_URL` = `https://akbarovlabs.staging.sarvarlogs.uz`,
-  Deployment branches → Selected → `main`.
-- **`production`**: secret `CONTABO_SSH_KEY` = `pbcopy < ~/.ssh/ci_akbarovlabs`,
-  variable `SITE_URL` = `https://akbarovlabs.uz`,
-  Deployment branches → Selected → `main`.
-
-Then **Actions → Build and deploy → Run workflow** (or push to `main`).
-Check staging, then **Promote to production → Run workflow**. Open
+Then **Actions → Build and deploy → Run workflow** (or push to `main`). Open
 `https://akbarovlabs.uz` and `https://www.akbarovlabs.uz` (it should
 redirect).
 
-Delete the keys from the Mac once both deploys are green:
+Delete the key from the Mac once the deploy is green:
 
 ```bash
-rm ~/.ssh/ci_akbarovlabs ~/.ssh/ci_akbarovlabs_staging
+rm ~/.ssh/ci_akbarovlabs
 ```
 
-### 5. Cloudflare proxy on
+### 4. Cloudflare proxy on
 
 Once `https://akbarovlabs.uz` works with Caddy's certificate:
 
@@ -103,10 +84,12 @@ add the label from `docs/cloudflare-real-ip.md` in `akbarov-labs/reads`.
 
 ## Day to day
 
-- Change something, push to `main` → staging updates in a few minutes.
-- Happy with staging → **Actions → Promote to production → Run workflow**.
-- Roll back: run **Promote to production** with an older commit's full SHA
-  (the server keeps the last 3 images).
+- Check the change locally (below), then push to `main` → production updates
+  in a few minutes.
+- Roll back: run **Actions → Promote to production → Run workflow** with an
+  older commit's full SHA (the server keeps the last 3 images).
+- CI doesn't copy `docker-compose.prod.yml` to the server. After changing it,
+  install the new copy at `/opt/apps/akbarovlabs/` by hand, owned by root.
 
 ## Local Docker check
 

@@ -43,6 +43,5 @@ Matn...
 
 ## Deploy
 
-The site runs on our own server behind Cloudflare: push to `main` → staging,
-then **Actions → Promote to production**. Setup and day-to-day steps:
-[DEPLOY.md](DEPLOY.md).
+The site runs on our own server behind Cloudflare: push to `main` →
+production. Setup and day-to-day steps: [DEPLOY.md](DEPLOY.md).
