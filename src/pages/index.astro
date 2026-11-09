@@ -7,6 +7,11 @@ import ChatDemo from '../components/ChatDemo.astro';
 import PostCard from '../components/PostCard.astro';
 import Featured from '../components/Featured.astro';
 import kitoblarim from '../assets/kitoblarim.png';
+import olgo from '../assets/works/olgo.png';
+import alifbo from '../assets/works/alifbo.png';
+import aktivYodla from '../assets/works/aktiv-yodla.png';
+import posbon from '../assets/works/posbon.png';
+import birgaolamizmi from '../assets/works/birgaolamizmi.png';
 import { site, plans, contactHref, contactLabel } from '../data/site';
 import { getPosts } from '../data/blog';
 
@@ -33,6 +38,50 @@ const services = [
     text: 'Mijozlarga kecha-kunduz javob beradigan bot, arizalarni saralash, hisobotlar boʻyicha savol-javob.',
     icon: '<path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/>',
     accent: true,
+  },
+];
+
+// The rest of what's live, under Kitoblarim.
+const works = [
+  {
+    name: 'Olgo',
+    kind: 'Sayt + Telegram bot',
+    text: 'Instagram sotuvchilari uchun Telegramda onlayn doʻkon. Mijozlar Payme, Click yoki naqd toʻlaydi, buyurtmalar sotuvchining telefonida.',
+    href: 'https://olgo.uz',
+    linkText: 'olgo.uz',
+    logo: olgo,
+  },
+  {
+    name: 'Yangi Alifbo',
+    kind: 'Sayt + Telegram bot',
+    text: 'Oʻzbek matnini kirill, lotin va yangi alifbo (ö, ğ, ş, ç) orasida oʻgiradi. Word, PDF, PowerPoint va Excel fayllarini ham.',
+    href: 'https://alifbo.akbarovlabs.uz',
+    linkText: 'alifbo.akbarovlabs.uz',
+    logo: alifbo,
+  },
+  {
+    name: 'Aktiv Yodla',
+    kind: 'Telegram Mini App',
+    text: 'Inglizcha soʻzlarni ishlatishni oʻrgatadi: har bir yangi soʻz darhol oʻz gapingizda, keyin esa unutilishidan oldin takrorlanadi.',
+    href: 'https://yodla.akbarovlabs.uz',
+    linkText: 'yodla.akbarovlabs.uz',
+    logo: aktivYodla,
+  },
+  {
+    name: 'Posbon',
+    kind: 'Telegram bot',
+    text: 'Telegram guruhlarni qoʻriqlaydi: yangi aʼzolarga captcha, spam va reklamaga qarshi himoya. Barcha sozlamalar bot bilan shaxsiy chatda.',
+    href: 'https://t.me/PosbonGuruhBot',
+    linkText: '@PosbonGuruhBot',
+    logo: posbon,
+  },
+  {
+    name: 'Birga olamizmi?',
+    kind: 'Telegram bot + Mini App',
+    text: 'Birgalikda xarid: odamlar bitta mahsulotga yigʻilib, uni ulgurji narxda oladi. Guruh toʻlmasa, hech kim hech narsa toʻlamaydi.',
+    href: 'https://birgaolamiz.akbarovlabs.uz',
+    linkText: 'birgaolamiz.akbarovlabs.uz',
+    logo: birgaolamizmi,
   },
 ];
 
@@ -111,13 +160,32 @@ const jsonLd = {
           <li>Audiokitoblar pleyeri</li>
           <li>Keyingi kitobni tanlashda maslahatchi</li>
         </ul>
-        <a href="https://t.me/kitob_javonim_bot" class="ext" rel="noopener">@kitob_javonim_bot →</a>
+        <div class="ext-row">
+          <a href="https://t.me/kitob_javonim_bot" class="ext" rel="noopener">@kitob_javonim_bot →</a>
+          <a href="https://kitoblarim.uz" class="ext" rel="noopener">kitoblarim.uz — kitoblar katalogi →</a>
+        </div>
       </div>
     </article>
-    <a href="#aloqa" class="next">
-      <span class="next-text">Keyingi ish — sizning loyihangiz.</span>
-      <span class="next-arrow" aria-hidden="true">→</span>
-    </a>
+
+    <ul class="works" role="list">
+      {works.map((w) => (
+        <li>
+          <a href={w.href} class="w-card" rel="noopener">
+            <Image src={w.logo} alt="" width={56} height={56} densities={[1, 2]} class="w-logo" />
+            <p class="meta"><span class="live" aria-hidden="true"></span>Ishlamoqda · {w.kind}</p>
+            <h3>{w.name}</h3>
+            <p class="w-text">{w.text}</p>
+            <span class="w-link">{w.linkText} →</span>
+          </a>
+        </li>
+      ))}
+      <li>
+        <a href="#aloqa" class="next">
+          <span class="next-text">Keyingi ish — sizning loyihangiz.</span>
+          <span class="next-arrow" aria-hidden="true">→</span>
+        </a>
+      </li>
+    </ul>
   </section>
 
   <!-- AI -->
@@ -403,18 +471,76 @@ const jsonLd = {
   .work-text li::marker {
     color: var(--saffron);
   }
+  .ext-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
+  }
   .ext {
-    align-self: flex-start;
     font-weight: 600;
     padding: 8px 0;
   }
-  .next {
-    margin-top: 48px;
+
+  .works {
+    list-style: none;
+    margin: 56px 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+  }
+  .w-card {
+    height: 100%;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .w-card:hover {
+    border-color: var(--lapis);
+    color: var(--ink);
+  }
+  .w-logo {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 4px;
+    border-radius: 16px;
+    /* Olgo's logo sits on white; the hairline keeps it from melting into the card. */
+    outline: 1px solid var(--line);
+    outline-offset: -1px;
+  }
+  .w-card h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 22px;
+  }
+  .w-text {
+    flex: 1;
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--body);
+  }
+  .w-link {
+    font-weight: 600;
+    color: var(--lapis);
+    overflow-wrap: anywhere;
+  }
+  /* The last cell of the works grid, so five products plus this make full rows. */
+  .next {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
     gap: 20px;
-    padding: 28px 32px;
+    padding: 28px;
     border-radius: var(--radius);
     border: 2px dashed var(--line-strong);
     color: var(--ink);
@@ -430,6 +556,7 @@ const jsonLd = {
     font-size: 22px;
   }
   .next-arrow {
+    align-self: flex-end;
     font-size: 28px;
     transition: transform 0.15s ease;
   }
@@ -736,12 +863,6 @@ const jsonLd = {
     .service:first-child {
       border-top: 0;
     }
-    .next {
-      padding: 22px 20px;
-    }
-    .next-text {
-      font-size: 18px;
-    }
     .ai-inner,
     .contact-inner {
       padding-block: 64px;
@@ -757,7 +878,8 @@ const jsonLd = {
     }
   }
   @media (prefers-reduced-motion: reduce) {
-    .next-arrow {
+    .next-arrow,
+    .w-card {
       transition: none;
     }
   }
