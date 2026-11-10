@@ -1,14 +1,20 @@
 ---
 import Mark from './Mark.astro';
+
+interface Props {
+  lang?: 'uz' | 'en';
+}
+const en = Astro.props.lang === 'en';
 ---
 <footer class="foot dark">
   <div class="wrap row">
-    <a href="/" class="brand" aria-label="Akbarov Labs — bosh sahifa">
+    <a href={en ? '/en/' : '/'} class="brand" aria-label={en ? 'Akbarov Labs — home' : 'Akbarov Labs — bosh sahifa'}>
       <Mark size={28} ink="var(--white)" stem="var(--saffron)" spark="var(--saffron)" />
       <span>akbarov labs</span>
     </a>
     <span>© {new Date().getFullYear()} Akbarov Labs · akbarovlabs.uz</span>
-    <span>Claude bilan qurilgan</span>
+    {en ? <a href="/" hreflang="uz" lang="uz">Oʻzbekcha</a> : <a href="/en/" hreflang="en" lang="en">English</a>}
+    <span>{en ? 'Built with Claude' : 'Claude bilan qurilgan'}</span>
   </div>
 </footer>
 

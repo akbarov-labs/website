@@ -5,11 +5,13 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
-# Build once, then deploy: every push to main becomes one image, which goes
+# Build once, then deploy: every push to main becomes two images, web (the
+# site) and assistant (the AI chat), tagged with the same commit, which go
 # straight to production (no staging, the same as random-bot and posbon).
 # promote.yml redeploys a chosen build by hand, which is the rollback button.
-# The image build runs `astro build`, so a broken page or bad blog post
-# front matter stops here, before anything is deployed.
+# The web build runs `astro build`, so a broken page or bad blog post front
+# matter stops here, before anything is deployed; the assistant's type check
+# stops a broken assistant the same way.
 
 permissions:
   contents: read
@@ -32,19 +34,42 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Type-check the assistant
+        working-directory: assistant
+        run: |
+          npm ci
+          npm run check
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push image
+      - name: Build and push the web image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
           tags: |
-            ${{ env.IMAGE }}:latest
-            ${{ env.IMAGE }}:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+            ${{ env.IMAGE }}/web:latest
+            ${{ env.IMAGE }}/web:${{ github.sha }}
+          cache-from: type=gha,scope=web
+          cache-to: type=gha,mode=max,scope=web
+
+      - name: Build and push the assistant image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: assistant/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE }}/assistant:latest
+            ${{ env.IMAGE }}/assistant:${{ github.sha }}
+          cache-from: type=gha,scope=assistant
+          cache-to: type=gha,mode=max,scope=assistant
 
   deploy-production:
     needs: build

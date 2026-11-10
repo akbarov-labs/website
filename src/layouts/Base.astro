@@ -20,13 +20,15 @@ interface Props {
   jsonLd?: Record<string, unknown>;
   /** Keep the page out of search results (404). */
   noindex?: boolean;
+  /** Page language. Everything is Uzbek except the English page at /en/. */
+  lang?: 'uz' | 'en';
 }
-const { title, description = site.description, current, type = 'website', published, jsonLd, noindex = false } = Astro.props;
+const { title, description = site.description, current, type = 'website', published, jsonLd, noindex = false, lang = 'uz' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const ogImage = new URL('/og-image.png', site.url).href;
 ---
 <!doctype html>
-<html lang="uz">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,7 +47,7 @@ const ogImage = new URL('/og-image.png', site.url).href;
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:locale" content="uz_UZ" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'uz_UZ'} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={canonical} />}
@@ -57,10 +59,10 @@ const ogImage = new URL('/og-image.png', site.url).href;
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
   </head>
   <body>
-    <Header current={current} />
+    <Header current={current} lang={lang} />
     <main>
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

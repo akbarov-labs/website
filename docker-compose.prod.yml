@@ -1,10 +1,15 @@
 # Production stack on the Contabo server, at /opt/apps/akbarovlabs next to a
-# root-owned .env with DOMAIN=akbarovlabs.uz (see DEPLOY.md). One nginx
-# container serving the built site; no database yet.
+# root-owned .env with DOMAIN=akbarovlabs.uz and the assistant's settings (see
+# DEPLOY.md). Two containers from one deploy: `web` (nginx serving the built
+# site) and `assistant` (the AI chat, see assistant/). No database.
 #
 # Public routing: the server's shared edge Caddy (caddy-docker-proxy) reads
 # the labels below and gets the HTTPS certificate. Cloudflare's proxy sits in
-# front of Caddy.
+# front of Caddy. Only `web` is public; it forwards /api/assistant/ to
+# `assistant` over the project's own network.
+#
+# deploy-app pulls both images: /etc/deploy-app/akbarovlabs.conf has
+# IMAGES="web assistant".
 
 # Docker keeps container logs forever unless told otherwise; cap every
 # service at 3 files of 10 MB. Applies to containers created after this lands.
@@ -14,21 +19,38 @@ x-logging: &default-logging
 
 services:
   web:
-    image: ${IMAGE:-ghcr.io/akbarov-labs/website}:${IMAGE_TAG:-latest}
+    image: ${IMAGE:-ghcr.io/akbarov-labs/website}/web:${IMAGE_TAG:-latest}
     container_name: akbarovlabs-web
     restart: unless-stopped
     logging: *default-logging
-    env_file: .env
+    # No env_file: nginx needs none, and .env holds the assistant's secrets.
     mem_limit: 64m
     networks:
       - edge
+      - internal
     labels:
       caddy: ${DOMAIN:?set DOMAIN in .env, e.g. akbarovlabs.uz}
       caddy.reverse_proxy: "{{upstreams 80}}"
+      # The visitor's real address behind Cloudflare, for the assistant's
+      # per-visitor limits (cloudflare-real-ip.md in akbarov-labs/reads).
+      caddy.reverse_proxy.header_up: "X-Forwarded-For {client_ip}"
       # www.akbarovlabs.uz → akbarovlabs.uz, one address for search engines.
       caddy_1: www.${DOMAIN}
       caddy_1.redir: "https://${DOMAIN}{uri} permanent"
 
+  assistant:
+    image: ${IMAGE:-ghcr.io/akbarov-labs/website}/assistant:${IMAGE_TAG:-latest}
+    # nginx finds it by this name (docker/nginx.conf).
+    container_name: akbarovlabs-assistant
+    restart: unless-stopped
+    logging: *default-logging
+    env_file: .env
+    mem_limit: 192m
+    read_only: true
+    networks:
+      - internal
+
 networks:
   edge:
     external: true
+  internal: {}

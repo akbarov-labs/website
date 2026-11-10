@@ -6,3 +6,6 @@ dist
 .env
 *.md
 !src/content/**/*.md
+**/node_modules
+!assistant/faq.md
+**/.env

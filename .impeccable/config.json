@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "/Users/its_akbarov/Library/Application Support/Claude/scratch-workspaces/4957e2c5-c35a-40b4-93bd-27af3948e19e/b18a1dd5-e974-4fa2-9836-ac54f1a4465d/scratch-2026-10-27-d1c8e0/shipping-report.html"
+        ],
+        "createdAt": "2026-10-27T07:57:32.047Z",
+        "reason": "Claude: flagged pairs mix dark-theme text tokens with light-theme surfaces (e.g. #9aa2b6 on #ffffff) or unset black on a dark surface; every element takes color from same-theme tokens"
+      }
+    ]
+  }
+}

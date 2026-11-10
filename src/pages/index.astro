@@ -3,7 +3,7 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Mark from '../components/Mark.astro';
 import Girih from '../components/Girih.astro';
-import ChatDemo from '../components/ChatDemo.astro';
+import Assistant from '../components/Assistant.astro';
 import PostCard from '../components/PostCard.astro';
 import Featured from '../components/Featured.astro';
 import kitoblarim from '../assets/kitoblarim.png';
@@ -13,77 +13,14 @@ import aktivYodla from '../assets/works/aktiv-yodla.png';
 import posbon from '../assets/works/posbon.png';
 import birgaolamizmi from '../assets/works/birgaolamizmi.png';
 import { site, plans, contactHref, contactLabel } from '../data/site';
+import { services } from '../data/services';
+import { featuredWork, works } from '../data/works';
 import { getPosts } from '../data/blog';
 
 const posts = (await getPosts()).slice(0, 3);
 
-const services = [
-  {
-    title: 'Veb-saytlar',
-    text: 'Landing, korporativ sayt, onlayn doʻkon. Tez yuklanadi, telefonda qulay, Googleʼda topiladi.',
-    icon: '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M7 6.5h.01M10 6.5h.01"/>',
-  },
-  {
-    title: 'Telegram botlar',
-    text: 'Buyurtma, yozilish, toʻlov va xabarnomalar — mijozlaringiz har kuni ochadigan ilova ichida.',
-    icon: '<path d="M21 4 3 11l6.5 2.2L19 7l-7.2 7.3.4 5.7 3.3-4.1L19.5 19z"/>',
-  },
-  {
-    title: 'CRM tizimlar',
-    text: 'Mijozlar, buyurtmalar va hisobotlar bitta joyda. Excel va daftarlar oʻrniga.',
-    icon: '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><path d="M14 15h7M14 18h5M14 21h7"/>',
-  },
-  {
-    title: 'AI yordamchilar',
-    text: 'Mijozlarga kecha-kunduz javob beradigan bot, arizalarni saralash, hisobotlar boʻyicha savol-javob.',
-    icon: '<path d="M12 3c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z"/>',
-    accent: true,
-  },
-];
-
-// The rest of what's live, under Kitoblarim.
-const works = [
-  {
-    name: 'Olgo',
-    kind: 'Sayt + Telegram bot',
-    text: 'Instagram sotuvchilari uchun Telegramda onlayn doʻkon. Mijozlar Payme, Click yoki naqd toʻlaydi, buyurtmalar sotuvchining telefonida.',
-    href: 'https://olgo.uz',
-    linkText: 'olgo.uz',
-    logo: olgo,
-  },
-  {
-    name: 'Yangi Alifbo',
-    kind: 'Sayt + Telegram bot',
-    text: 'Oʻzbek matnini kirill, lotin va yangi alifbo (ö, ğ, ş, ç) orasida oʻgiradi. Word, PDF, PowerPoint va Excel fayllarini ham.',
-    href: 'https://alifbo.akbarovlabs.uz',
-    linkText: 'alifbo.akbarovlabs.uz',
-    logo: alifbo,
-  },
-  {
-    name: 'Aktiv Yodla',
-    kind: 'Telegram Mini App',
-    text: 'Inglizcha soʻzlarni ishlatishni oʻrgatadi: har bir yangi soʻz darhol oʻz gapingizda, keyin esa unutilishidan oldin takrorlanadi.',
-    href: 'https://yodla.akbarovlabs.uz',
-    linkText: 'yodla.akbarovlabs.uz',
-    logo: aktivYodla,
-  },
-  {
-    name: 'Posbon',
-    kind: 'Telegram bot',
-    text: 'Telegram guruhlarni qoʻriqlaydi: yangi aʼzolarga captcha, spam va reklamaga qarshi himoya. Barcha sozlamalar bot bilan shaxsiy chatda.',
-    href: 'https://t.me/PosbonGuruhBot',
-    linkText: '@PosbonGuruhBot',
-    logo: posbon,
-  },
-  {
-    name: 'Birga olamizmi?',
-    kind: 'Telegram bot + Mini App',
-    text: 'Birgalikda xarid: odamlar bitta mahsulotga yigʻilib, uni ulgurji narxda oladi. Guruh toʻlmasa, hech kim hech narsa toʻlamaydi.',
-    href: 'https://birgaolamiz.akbarovlabs.uz',
-    linkText: 'birgaolamiz.akbarovlabs.uz',
-    logo: birgaolamizmi,
-  },
-];
+// Logos for src/data/works.ts, by id (that file stays import-free for the assistant).
+const logos = { olgo, alifbo, 'aktiv-yodla': aktivYodla, posbon, birgaolamizmi };
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -115,7 +52,7 @@ const jsonLd = {
     </div>
     <div class="hero-panel">
       <Girih id="g-hero" opacity={0.9} />
-      <ChatDemo />
+      <Assistant />
     </div>
   </section>
 
@@ -148,21 +85,14 @@ const jsonLd = {
         <Image src={kitoblarim} alt="Kitoblarim logotipi: “Har bir kitob oʻz javonida.”" widths={[480, 800, 1200]} sizes="(max-width: 900px) 100vw, 640px" />
       </div>
       <div class="work-text">
-        <p class="meta"><span class="live" aria-hidden="true"></span>Ishlamoqda · Telegram bot + Mini App · 3 tilda</p>
-        <h3>Kitoblarim</h3>
-        <p>
-          Boshlagan kitobingizni oxirigacha oʻqishga yordam beradigan bepul Telegram ilova. Tugatish sanasini tanlaysiz —
-          ilova kuniga necha sahifa oʻqish kerakligini hisoblaydi va Telegramda eslatib turadi.
-        </p>
+        <p class="meta"><span class="live" aria-hidden="true"></span>Ishlamoqda · {featuredWork.kind}</p>
+        <h3>{featuredWork.name}</h3>
+        <p>{featuredWork.text}</p>
         <ul>
-          <li>Shaxsiy va oilaviy kutubxona, shtrix-kod orqali kitob qoʻshish</li>
-          <li>Telegram guruhlarda oʻqish marafonlari</li>
-          <li>Audiokitoblar pleyeri</li>
-          <li>Keyingi kitobni tanlashda maslahatchi</li>
+          {featuredWork.features.map((f) => <li>{f}</li>)}
         </ul>
         <div class="ext-row">
-          <a href="https://t.me/kitob_javonim_bot" class="ext" rel="noopener">@kitob_javonim_bot →</a>
-          <a href="https://kitoblarim.uz" class="ext" rel="noopener">kitoblarim.uz — kitoblar katalogi →</a>
+          {featuredWork.links.map((l) => <a href={l.href} class="ext" rel="noopener">{l.text} →</a>)}
         </div>
       </div>
     </article>
@@ -171,7 +101,7 @@ const jsonLd = {
       {works.map((w) => (
         <li>
           <a href={w.href} class="w-card" rel="noopener">
-            <Image src={w.logo} alt="" width={56} height={56} densities={[1, 2]} class="w-logo" />
+            <Image src={logos[w.id as keyof typeof logos]} alt="" width={56} height={56} densities={[1, 2]} class="w-logo" />
             <p class="meta"><span class="live" aria-hidden="true"></span>Ishlamoqda · {w.kind}</p>
             <h3>{w.name}</h3>
             <p class="w-text">{w.text}</p>

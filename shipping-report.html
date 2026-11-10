@@ -1,0 +1,302 @@
+<title>Akbarov Labs Shipping Report</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; a status tally, what changed, then one section per release state, then open items. */
+:root {
+  --bg: #f6f7fa;
+  --surface: #ffffff;
+  --fg: #171b26;
+  --muted: #525a6c;
+  --rule: #dfe2ea;
+  --accent: #2c46c9;
+  --live: #166640;  --live-bg: #e3f3ea;
+  --built: #7f4a00; --built-bg: #fbefd9;
+  --local: #4f5668; --local-bg: #eceef3;
+  --work: #2c46c9;  --work-bg: #e6eafc;
+  --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #11141c; --surface: #181c26; --fg: #e8eaf1; --muted: #9aa2b6; --rule: #2a3040; --accent: #8ea0ff;
+  --live: #6fd39f; --live-bg: #16301f; --built: #f0b45a; --built-bg: #33270f; --local: #a7aec0; --local-bg: #232838;
+  --work: #a9b6ff; --work-bg: #1e2547;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #11141c; --surface: #181c26; --fg: #e8eaf1; --muted: #9aa2b6; --rule: #2a3040; --accent: #8ea0ff;
+  --live: #6fd39f; --live-bg: #16301f; --built: #f0b45a; --built-bg: #33270f; --local: #a7aec0; --local-bg: #232838;
+  --work: #a9b6ff; --work-bg: #1e2547;
+  color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 400 15px/1.6 var(--body); }
+.wrap { max-width: 920px; margin: 0 auto; padding-block: 48px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 52px; }
+.wrap > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; }
+h2 { font-size: 22px; }
+h3 { font-size: 19px; }
+p { margin: 0; max-width: 70ch; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+code { font-family: var(--mono); font-size: 0.9em; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+
+header { display: grid; gap: 14px; }
+.lede { font-size: 17px; color: var(--muted); }
+
+.tally { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+.tally div { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; display: grid; gap: 4px; align-content: start; }
+.tally b { font: 700 32px/1 var(--display); font-variant-numeric: tabular-nums; }
+.tally .l b { color: var(--live); } .tally .b b { color: var(--built); } .tally .o b { color: var(--local); } .tally .w b { color: var(--work); }
+.tally span { font-size: 13px; color: var(--muted); }
+
+.pill { display: inline-block; font: 500 12px/1 var(--mono); padding: 8px 12px; border-radius: 99px; white-space: nowrap; }
+.pill.live { color: var(--live); background: var(--live-bg); }
+.pill.built { color: var(--built); background: var(--built-bg); }
+.pill.local { color: var(--local); background: var(--local-bg); }
+.pill.work { color: var(--work); background: var(--work-bg); }
+
+.table-scroll { overflow-x: auto; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; min-width: 700px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { font: 500 11px/1.2 var(--mono); letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+td.name { font-weight: 600; white-space: nowrap; }
+td.num { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+th.num { text-align: right; }
+
+section.group { display: grid; gap: 20px; }
+section.group > * { min-width: 0; }
+.group > h2 { padding-bottom: 10px; border-bottom: 2px solid var(--fg); display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.group > p { color: var(--muted); }
+article { display: grid; gap: 12px; padding-bottom: 24px; border-bottom: 1px solid var(--rule); }
+article:last-child { border-bottom: 0; padding-bottom: 0; }
+.head { display: flex; gap: 10px 14px; align-items: baseline; flex-wrap: wrap; }
+ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; }
+
+.verdict { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 18px 20px; display: grid; gap: 10px; }
+
+.result { background: var(--surface); border: 1px solid var(--rule); border-radius: 8px; padding: 14px 16px; display: grid; gap: 6px; }
+.result .row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 16px; font-variant-numeric: tabular-nums; }
+.result .row b { color: var(--live); }
+
+footer { color: var(--muted); font-size: 13px; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 18px; }
+
+@media (max-width: 820px) { .tally { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) {
+  .result .row { grid-template-columns: minmax(0, 1fr) auto; }
+  .result .row .was { display: none; }
+}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Status as of 5 November 2026</div>
+    <h1>What we built, and what is live</h1>
+    <p class="lede">All 45 projects in <code>~/dev</code>, rechecked against GitHub’s production deployment records and today’s live addresses. Nine older repositories exist only on GitHub and are listed separately.</p>
+  </header>
+
+  <div class="tally" aria-label="Release status summary">
+    <div class="l"><b>14</b><span>live in production</span></div>
+    <div class="l"><b>3</b><span>live as a demo or test site</span></div>
+    <div class="b"><b>8</b><span>built, not deployed</span></div>
+    <div class="o"><b>13</b><span>client sites and prototypes</span></div>
+    <div class="w"><b>7</b><span>Inter Nation work systems</span></div>
+  </div>
+
+  <section class="group" aria-labelledby="changed">
+    <h2 id="changed">What changed since 27 October</h2>
+    <ul>
+      <li><b>Newly live:</b> akbarovlabs.uz, Aktiv Yodla, Posbon and SMS Gateway. Birga olamizmi is new and already live.</li>
+      <li><b>Newly online as a demo or test site:</b> Sabaq (formerly Light LMS), Organic Living and Even Buses Tashkent.</li>
+      <li><b>New projects:</b> Birga olamizmi, Organic Living, and two contest-bot builders.</li>
+      <li><b>Closed open items:</b> Even Buses Tashkent is now in git and on GitHub, and Aktiv Yodla’s commits are pushed.</li>
+    </ul>
+  </section>
+
+  <section class="group" aria-labelledby="corrections">
+    <h2 id="corrections">Corrections to the last report</h2>
+    <ul>
+      <li><b>Personal site:</b> its last production release was 14 Oct, not 17 Oct. The 17 and 28 Oct deploys only reached staging.</li>
+      <li><b>Staging:</b> I said akbarovlabs.uz would be the only project without staging. That was wrong: most of your apps already run without it. See the updated recommendation below.</li>
+      <li><b>Choyxona POS:</b> I said it was installed on a restaurant’s computer. It is designed to run that way, but nothing shows an actual installation.</li>
+      <li><b>Project count:</b> “all projects” missed the repositories that exist only on GitHub.</li>
+      <li><b>Work commit counts:</b> these include every branch, so hotfixes copied between branches count more than once. This version also shows how many reached the main branch.</li>
+    </ul>
+  </section>
+
+  <section class="group" aria-labelledby="staging">
+    <h2 id="staging">Staging for akbarovlabs.uz</h2>
+    <div class="verdict">
+      <p><b>Updated recommendation: drop it.</b> You were right, and I’m changing my earlier advice.</p>
+      <ul>
+        <li><b>It would match your other apps.</b> 9 of your 16 deployed apps run production-only, including Posbon, which dropped staging on 5 Nov.</li>
+        <li><b>The manual step already causes drift.</b> The site’s newest commit (<code>4198f71</code>, 28 Oct) has sat on staging for 8 days without reaching production. Your personal site has the same gap, with production stuck at 14 Oct.</li>
+        <li><b>The risk is low.</b> It is a static site with no database, it can be checked locally with Docker, and <code>promote.yml</code> can roll back to any recent image.</li>
+      </ul>
+      <p>The change is the one Posbon already made: push to <code>main</code> deploys straight to production. Removing the staging stack on the server is a separate manual step. Add staging back when the contact form and AI assistant arrive.</p>
+    </div>
+  </section>
+
+  <!-- LIVE -->
+  <section class="group" aria-labelledby="live">
+    <h2 id="live">Live in production <span class="pill live">released</span></h2>
+    <p>Each has a successful production deployment on GitHub. Web addresses were checked today. Bots without a public page have only the deployment record as evidence.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Product</th><th>What it is</th><th>Where</th><th class="num">Commits</th><th class="num">In production</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Kitoblarim</td><td>Reading tracker, Telegram Mini App</td><td class="mono">app.kitoblarim.uz</td><td class="num">435</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">Reads</td><td>Uzbek book catalogue site</td><td class="mono">kitoblarim.uz</td><td class="num">156</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">Reads admin</td><td>Back office for Reads</td><td class="mono">dashboard.kitoblarim.uz</td><td class="num">119</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">Aktiv Yodla</td><td>Active-vocabulary Mini App with landing page</td><td class="mono">yodla.akbarovlabs.uz</td><td class="num">31</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">Posbon</td><td>Telegram group manager bot</td><td class="mono">@PosbonGuruhBot</td><td class="num">16</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">Birga olamizmi</td><td>Group-buying bot and Mini App</td><td class="mono">birgaolamiz.akbarovlabs.uz</td><td class="num">21</td><td class="num">5 Nov</td></tr>
+          <tr><td class="name">SMS Gateway</td><td>SMS through your own phones and SIM cards</td><td class="mono">sms.akbarovlabs.uz</td><td class="num">25</td><td class="num">2 Nov</td></tr>
+          <tr><td class="name">Random Bot (omad)</td><td>Verifiable Telegram giveaways</td><td class="mono">omad.akbarovlabs.uz</td><td class="num">9</td><td class="num">28 Oct</td></tr>
+          <tr><td class="name">akbarovlabs.uz</td><td>Studio website and blog</td><td class="mono">akbarovlabs.uz</td><td class="num">4</td><td class="num">27 Oct</td></tr>
+          <tr><td class="name">Kitob Marafoni</td><td>Bot for @Marafon_Kitob book challenges</td><td class="mono">Telegram bot</td><td class="num">7</td><td class="num">26 Oct</td></tr>
+          <tr><td class="name">Yukla</td><td>YouTube and Instagram downloader bot</td><td class="mono">Telegram bot</td><td class="num">5</td><td class="num">25 Oct</td></tr>
+          <tr><td class="name">Yangi Alifbo</td><td>Uzbek alphabet converter</td><td class="mono">alifbo.akbarovlabs.uz</td><td class="num">21</td><td class="num">25 Oct</td></tr>
+          <tr><td class="name">Olgo</td><td>Storefront and Mini App for Instagram sellers</td><td class="mono">olgo.uz</td><td class="num">223</td><td class="num">24 Oct</td></tr>
+          <tr><td class="name">Personal site</td><td>Blog and portfolio</td><td class="mono">sarvarlogs.uz</td><td class="num">17</td><td class="num">14 Oct</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <article>
+      <div class="head"><h3>Main products</h3></div>
+      <ul>
+        <li><b>Kitoblarim</b> (78 merged PRs): all 8 roadmap phases, audiobooks and monthly recaps. New since October: shareable monthly reading lists, a news-channel post of everyone’s month after admin approval, and reviews written in the chat from Reads.</li>
+        <li><b>Reads + Reads admin</b> (102 merged PRs): catalogue in uz / ru / en, search, Ask AI, libraries, pre-orders, and click and page stats. New since October: opening a book from a reader’s shared list, and “write a review” click counts.</li>
+        <li><b>Olgo</b> (48 merged PRs): multi-tenant shop for Instagram sellers with API, storefront, Mini App, bot and nightly backups.</li>
+        <li><b>Aktiv Yodla:</b> 500 seeded words, spaced repetition, a landing page at <code>/</code> with the Mini App at <code>/app</code>, admin stats and broadcasts, and a scheduled content backup.</li>
+        <li><b>Posbon:</b> a math captcha mode, flood control, language choice on first <code>/start</code>, and an admin panel.</li>
+        <li><b>Birga olamizmi:</b> buyers join a group, and once it fills everyone buys at the wholesale price. Includes the catalogue, payment holds through Payme, and admin screens.</li>
+        <li><b>SMS Gateway:</b> pacing per phone, sending hours per client, retries on no-signal failures, and a dashboard. The Inter Nation LMS is its first client.</li>
+      </ul>
+    </article>
+  </section>
+
+  <section class="group" aria-labelledby="demo">
+    <h2 id="demo">Live as a demo or test site <span class="pill live">online, not launched</span></h2>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Project</th><th>What it is</th><th>Where</th><th class="num">Commits</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Sabaq</td><td>CRM/LMS for private education centers (formerly Light LMS)</td><td class="mono">sabaq.akbarovlabs.uz</td><td class="num">143</td><td>Public demo in production since 1 Nov. Its last status note says payments and SMS were untested with real keys.</td></tr>
+          <tr><td class="name">Organic Living</td><td>Store and dashboard for the brand’s Uzbekistan distributor</td><td class="mono">organicliving.akbarovlabs.uz</td><td class="num">12</td><td>Test site since 1 Nov, deliberately kept out of search engines.</td></tr>
+          <tr><td class="name">Even Buses Tashkent</td><td>Bus headway control MVP and simulator</td><td class="mono">evenbuses.akbarovlabs.uz</td><td class="num">12</td><td>Public demo and landing page, plus a pitch prepared for UzCombinator. No deployment record on GitHub.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="result" aria-label="Route 17 simulation results">
+      <div class="eyebrow">Even Buses · Route 17 · 30 simulated mornings</div>
+      <div class="row"><span>Buses arriving bunched</span><span class="mono muted was">22.2%</span><b class="mono">1.8%</b></div>
+      <div class="row"><span>Passengers waiting over 15 min</span><span class="mono muted was">11.3%</span><b class="mono">5.2%</b></div>
+      <div class="row"><span>Average wait at stop</span><span class="mono muted was">7.3 min</span><b class="mono">6.3 min</b></div>
+      <span class="muted" style="font-size:13px">Fixed timetable today → headway control. These are simulation results, not field results.</span>
+    </div>
+  </section>
+
+  <!-- BUILT -->
+  <section class="group" aria-labelledby="built">
+    <h2 id="built">Built, not deployed <span class="pill built">not released</span></h2>
+    <p>None of these has a production deployment record on GitHub.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Project</th><th>What it is</th><th class="num">Commits</th><th>What is missing</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Kimman</td><td>Psychological tests and a workspace for psychologists</td><td class="num">27</td><td>CI passes, but there is no deploy workflow.</td></tr>
+          <tr><td class="name">Do’kon POS</td><td>Multi-branch retail POS with offline selling</td><td class="num">23</td><td>No GitHub repository, so its deploy workflows have never run.</td></tr>
+          <tr><td class="name">Test-Me</td><td>Teachers create and sell tests, graded automatically</td><td class="num">19</td><td>CI passes, but test-me.uz does not answer and there is no deploy workflow.</td></tr>
+          <tr><td class="name">Finance helper</td><td>Finance bot with a Web App, budgets and group spending</td><td class="num">16</td><td>Tests pass and launch blockers are fixed, but 27 files are uncommitted and there is no deploy workflow.</td></tr>
+          <tr><td class="name">Choyxona POS</td><td>Self-hosted restaurant POS</td><td class="num">13</td><td>CI passes. It runs on a restaurant’s own computer, and no installation is recorded.</td></tr>
+          <tr><td class="name">Qadam</td><td>English level test, goal and step-by-step plan</td><td class="num">3</td><td>No workflows or server. Its vocabulary test now uses Aktiv Yodla’s words.</td></tr>
+          <tr><td class="name">Referal konkurs builder</td><td>One deployment runs referral-contest bots for many clients</td><td class="num">1</td><td>No GitHub repository.</td></tr>
+          <tr><td class="name">Konkurs bot</td><td>Contest-bot constructor: an owner sends a token and gets a bot</td><td class="num">—</td><td>Not in git. It overlaps with the referral builder, so one may be enough.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="group" aria-labelledby="work">
+    <h2 id="work">Inter Nation (work) <span class="pill work">company GitLab</span></h2>
+    <p>Your commits only. “Main branch” shows how many since 1 Oct reached it, which is not proof of deployment. Company deploys were not checked.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>System</th><th class="num">All time</th><th class="num">Since 1 Oct</th><th class="num">Main branch</th><th>Recent work</th></tr></thead>
+        <tbody>
+          <tr><td class="name">LMS</td><td class="num">5,090</td><td class="num">196</td><td class="num">121</td><td>Penalty and cover-reward hotfixes, Zoom checks, discounts, timetable risk flags, SMS through the new gateway</td></tr>
+          <tr><td class="name">IELTS testing platform</td><td class="num">1,698</td><td class="num">105</td><td class="num">100</td><td>Online exam booking and regions, free guest mock exams, supervisor slots</td></tr>
+          <tr><td class="name">Stock</td><td class="num">814</td><td class="num">19</td><td class="num">18</td><td>Region filters on admin orders, achievement counts</td></tr>
+          <tr><td class="name">Task system</td><td class="num">769</td><td class="num">5</td><td class="num">4</td><td>Recurring system_log errors and PHP 8.2 deprecations</td></tr>
+          <tr><td class="name">Application</td><td class="num">695</td><td class="num">23</td><td class="num">23</td><td>ST-11704: achievement levels move from pub/sub to cron</td></tr>
+          <tr><td class="name">Exam</td><td class="num">414</td><td class="num">34</td><td class="num">27</td><td>Student book answers and grading (ST-12824)</td></tr>
+          <tr><td class="name">ARS websocket</td><td class="num">7</td><td class="num">7</td><td class="num">0</td><td>Student book rooms over the socket; none of it is on the main branch yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- PROTOTYPES -->
+  <section class="group" aria-labelledby="proto">
+    <h2 id="proto">Client sites and prototypes <span class="pill local">no release found</span></h2>
+    <p>No deployment record. Some may have been handed over or hosted elsewhere, which this check can’t see.</p>
+    <div class="table-scroll">
+      <table>
+        <thead><tr><th>Project</th><th>What it is</th><th>When</th><th>Repository</th></tr></thead>
+        <tbody>
+          <tr><td class="name">Akbarov Labs brand kit</td><td>The “Ai” mark, colours and assets</td><td class="mono">24 Oct</td><td class="muted">not in git</td></tr>
+          <tr><td class="name">Muqimiy theatre</td><td>Theatre website</td><td class="mono">19 Oct</td><td class="mono">muqumiy</td></tr>
+          <tr><td class="name">Dentist site</td><td>Bilingual site for a solo dental specialist, with booking</td><td class="mono">15–18 Oct</td><td class="mono">dentist-2</td></tr>
+          <tr><td class="name">Korean Implant Center</td><td>Clinic site, two versions (Next.js and Astro)</td><td class="mono">4–14 Oct</td><td class="muted">not on GitHub</td></tr>
+          <tr><td class="name">605 redesign</td><td>Redesign prototype, three versions</td><td class="mono">3–4 Oct</td><td class="muted">not on GitHub</td></tr>
+          <tr><td class="name">Rosemarine Organic</td><td>Three-language site for a handmade soap brand</td><td class="mono">2 Oct</td><td class="mono">rosemarine</td></tr>
+          <tr><td class="name">Channel ↔ blog</td><td>Telegram channel and website kept in sync</td><td class="mono">1–2 Oct</td><td class="mono">publish-channel-bot</td></tr>
+          <tr><td class="name">Cleaning website</td><td>Cleaning-service site, three versions</td><td class="mono">1 Oct</td><td class="mono">cleaning-website</td></tr>
+          <tr><td class="name">CRM Admin</td><td>Multi-company CRM</td><td class="mono">1 Oct</td><td class="mono">crm-admin</td></tr>
+          <tr><td class="name">Zabarjad Media</td><td>Publishing-house storefront</td><td class="mono">Aug–Sep</td><td class="mono">zabarjad-media</td></tr>
+          <tr><td class="name">Top Project</td><td>Client site (idrok.group)</td><td class="mono">Mar</td><td class="mono">idrok GitLab</td></tr>
+          <tr><td class="name">G2 v2</td><td>Client site (idrok.group)</td><td class="mono">Feb–Mar</td><td class="mono">idrok GitLab</td></tr>
+          <tr><td class="name">Yonka Group</td><td>Client site (idrok.group)</td><td class="mono">Dec 2025–Feb</td><td class="mono">idrok GitLab</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="group" aria-labelledby="ghonly">
+    <h2 id="ghonly">On GitHub only <span class="pill local">status unknown</span></h2>
+    <p>Not on this Mac, and with no deployment records, so whether they still run is unknown. They are not part of the 45.</p>
+    <ul>
+      <li><b>2026:</b> lesson-monitor, railway-monitor-bot (train-seat alerts for eticket.railway.uz), killspam-bot (spam protection), guard-bot, muqimiy-theater.</li>
+      <li><b>Older:</b> nnp_order_bot and nnp_proxy (2025), book_api and flask-dashboard (2023).</li>
+    </ul>
+  </section>
+
+  <section class="group" aria-labelledby="todo">
+    <h2 id="todo">Open items</h2>
+    <ul>
+      <li><b>Promote or automate:</b> akbarovlabs.uz and the personal site both have commits waiting on staging.</li>
+      <li><b>SMS Gateway:</b> <code>.env.production</code> is untracked and not ignored by git, so it could be committed by accident. Add it to <code>.gitignore</code>.</li>
+      <li><b>Old deploy keys:</b> private CI keys remain in <code>~/.ssh</code> for birgaolamizmi, kitob_marafoni, olgo (2), random_bot, sms_gateway and upload_from_sm. Your guide says to delete them once deploys pass.</li>
+      <li><b>No GitHub copy:</b> Do’kon POS, 605 redesign, Korean Implant Center (both versions), Referal konkurs builder, Konkurs bot, brand kit.</li>
+      <li><b>Finance helper:</b> commit the 27 changed files.</li>
+      <li><b>Test-Me:</b> test-me.uz still does not answer. Decide whether to deploy it.</li>
+      <li><b>Next to launch:</b> Kimman, Qadam and Finance helper each need a deploy setup.</li>
+      <li><b>Before the next change:</b> several local checkouts sit on old branches behind GitHub, including Reads admin (56 commits), Reads (15) and Kitoblarim (7).</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Sources: git history in ~/dev, GitHub deployment records and Actions runs, and HTTP checks of each public address on 5 Nov 2026. Bot-only products were not messaged. posbon.akbarovlabs.uz returns 404 at its root, so that address does not confirm the bot is running.</span>
+    <span>“Live in production” means a successful deployment to the production environment, and a working address where the product has a public page.</span>
+  </footer>
+</div>

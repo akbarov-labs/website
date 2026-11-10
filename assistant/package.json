@@ -1,0 +1,24 @@
+{
+  "name": "akbarovlabs-assistant",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The website's AI assistant: answers about Akbarov Labs and passes leads to Telegram.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node src/server.ts",
+    "dev": "node --watch --env-file-if-exists=.env src/server.ts",
+    "check": "tsc -p .",
+    "knowledge": "node src/print-knowledge.ts",
+    "eval": "node --env-file-if-exists=.env eval/run.ts"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "typescript": "^7.0.2"
+  }
+}

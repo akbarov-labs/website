@@ -3,20 +3,31 @@ import Mark from './Mark.astro';
 
 interface Props {
   current?: 'home' | 'blog' | 'other';
+  lang?: 'uz' | 'en';
 }
-const { current = 'home' } = Astro.props;
+const { current = 'home', lang = 'uz' } = Astro.props;
+const en = lang === 'en';
 // On the home page the section links are plain anchors; elsewhere they go back home.
 const home = current === 'home' ? '' : '/';
-const links = [
-  { href: `${home}#xizmatlar`, label: 'Xizmatlar' },
-  { href: `${home}#ishlar`, label: 'Ishlar' },
-  { href: `${home}#narxlar`, label: 'Narxlar' },
-  { href: '/blog/', label: 'Blog', active: current === 'blog' },
-];
+// The English page is one page, so its links are anchors on it.
+const links = en
+  ? [
+      { href: '#services', label: 'Services' },
+      { href: '#products', label: 'Products' },
+    ]
+  : [
+      { href: `${home}#xizmatlar`, label: 'Xizmatlar' },
+      { href: `${home}#ishlar`, label: 'Ishlar' },
+      { href: `${home}#narxlar`, label: 'Narxlar' },
+      { href: '/blog/', label: 'Blog', active: current === 'blog' },
+    ];
+const switchLang = en
+  ? { href: '/', label: 'UZ', hreflang: 'uz', title: 'Oʻzbekcha' }
+  : { href: '/en/', label: 'EN', hreflang: 'en', title: 'English' };
 ---
 <header class="head">
-  <nav aria-label="Asosiy menyu" class="wrap nav">
-    <a href="/" class="brand" aria-label="Akbarov Labs — bosh sahifa">
+  <nav aria-label={en ? 'Main menu' : 'Asosiy menyu'} class="wrap nav">
+    <a href={en ? '/en/' : '/'} class="brand" aria-label={en ? 'Akbarov Labs — home' : 'Akbarov Labs — bosh sahifa'}>
       <Mark size={34} />
       <span>akbarov labs</span>
     </a>
@@ -24,8 +35,9 @@ const links = [
       {links.map((l) => (
         <a href={l.href} aria-current={l.active ? 'page' : undefined}>{l.label}</a>
       ))}
+      <a href={switchLang.href} hreflang={switchLang.hreflang} lang={switchLang.hreflang} title={switchLang.title} class="lang">{switchLang.label}</a>
     </div>
-    <a href={`${home}#aloqa`} class="btn btn-primary btn-sm">Bogʻlanish</a>
+    <a href={en ? '#contact' : `${home}#aloqa`} class="btn btn-primary btn-sm">{en ? 'Contact' : 'Bogʻlanish'}</a>
   </nav>
 </header>
 
@@ -70,6 +82,12 @@ const links = [
   }
   .links a:hover {
     color: var(--lapis);
+  }
+  .links .lang {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
   }
   .links a[aria-current='page'] {
     color: var(--lapis);

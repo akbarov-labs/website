@@ -1,21 +1,24 @@
 # Deploying akbarovlabs.uz
 
 The site runs on the Contabo server, production only (no staging), the same
-way as random-bot and posbon: GitHub builds a Docker image and every push to
-`main` goes straight to production.
+way as random-bot and posbon: GitHub builds two Docker images and every push
+to `main` goes straight to production.
 
 | | Production |
 |---|---|
 | Address | `https://akbarovlabs.uz` (+ `www` → redirect) |
 | Folder on the server | `/opt/apps/akbarovlabs` |
-| Container | `akbarovlabs-web` |
+| Containers | `akbarovlabs-web`, `akbarovlabs-assistant` |
+| Images | `ghcr.io/akbarov-labs/website/web`, `.../website/assistant` |
 | Deploys | every push to `main` |
 
-The image is nginx serving the built files (see `Dockerfile` and
-`docker/nginx.conf`). No database and nothing to back up yet.
+`web` is nginx serving the built files (see `Dockerfile` and
+`docker/nginx.conf`). `assistant` is the AI chat (see `assistant/` and
+`docs/ai-assistant.md`); nginx forwards `/api/assistant/` to it. No database
+and nothing to back up.
 
 Traffic: visitor → **Cloudflare** (DNS, caching, protection) → the server's
-shared **edge Caddy** (HTTPS) → this container.
+shared **edge Caddy** (HTTPS) → `web` → (chat only) `assistant`.
 
 The general server tools and docs live in `akbarov-labs/reads`:
 `docs/add-app.md` and `docs/cloudflare-real-ip.md`.
@@ -44,9 +47,10 @@ production half instead, using `infra/setup-server.sh` in
 
 - Make a CI key on the Mac:
   `ssh-keygen -q -t ed25519 -f ~/.ssh/ci_akbarovlabs -N "" -C ci_akbarovlabs`.
-- Set `APP=akbarovlabs` and `REPO=ghcr.io/akbarov-labs/website`, and require
-  only `DOMAIN` in the `.env`. The `.env` is one line:
-  `DOMAIN=akbarovlabs.uz`.
+- Set `APP=akbarovlabs` and `REPO=ghcr.io/akbarov-labs/website`, add
+  `IMAGES="web assistant"` to the deploy-app config it writes, and require
+  only `DOMAIN` in the `.env`. The `.env` is `DOMAIN=akbarovlabs.uz` plus the
+  assistant's settings from `assistant/.env.example`.
 
 ### 3. GitHub
 
@@ -90,6 +94,64 @@ add the label from `docs/cloudflare-real-ip.md` in `akbarov-labs/reads`.
   older commit's full SHA (the server keeps the last 3 images).
 - CI doesn't copy `docker-compose.prod.yml` to the server. After changing it,
   install the new copy at `/opt/apps/akbarovlabs/` by hand, owned by root.
+- After changing `.env` (e.g. turning the assistant on or off), run **Promote
+  to production** with no SHA: it recreates both containers with the new
+  settings.
+
+## The AI assistant
+
+### Moving the server to two images (once)
+
+Do this **before** pushing the commit that adds the assistant. Until then,
+deploys still expect the single `website` image and would fail at the pull
+(the running site is not touched).
+
+On the Mac, send the new compose file:
+
+```bash
+scp ~/dev/sites/akbarovlabs/docker-compose.prod.yml sarvar@169.58.243.86:/tmp/
+```
+
+On the server:
+
+```bash
+sudo install -m 644 -o root -g root /tmp/docker-compose.prod.yml /opt/apps/akbarovlabs/docker-compose.prod.yml && rm /tmp/docker-compose.prod.yml
+```
+
+```bash
+grep -q '^IMAGES=' /etc/deploy-app/akbarovlabs.conf || echo 'IMAGES="web assistant"' | sudo tee -a /etc/deploy-app/akbarovlabs.conf
+```
+
+Then add the assistant's settings to `/opt/apps/akbarovlabs/.env`
+(`sudo nano /opt/apps/akbarovlabs/.env`). The names and what each one is are
+in `assistant/.env.example`. Start with `ASSISTANT_ENABLED=false`.
+
+Push to `main`. Both containers come up; the chat stays the sample.
+
+### Turning it on and off
+
+Set `ASSISTANT_ENABLED=true` (or `false`) in `.env`, then run **Promote to
+production** with no SHA. The page asks the assistant on every load whether
+it is on, so no new build is needed.
+
+Before turning it on, or switching `ASSISTANT_MODEL`, run the eval on the Mac
+(`cd assistant && npm run eval`) and read the answers it writes.
+
+### What it's doing
+
+Logs are JSON lines without anything visitors typed:
+
+```bash
+sudo docker logs akbarovlabs-assistant --since 24h | grep '"event":"turn"' | tail -n 5
+```
+
+`costUsd` is each reply's cost and `todayUsd` the day's total; past
+`ASSISTANT_DAILY_BUDGET_USD` the chat shows the contact button until midnight
+(Tashkent time). Questions it couldn't answer, to add to `assistant/faq.md`:
+
+```bash
+sudo docker logs akbarovlabs-assistant --since 168h | grep '"event":"gap"'
+```
 
 ## Local Docker check
 
