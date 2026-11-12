@@ -1,12 +1,10 @@
 ---
-import '@fontsource/unbounded/500.css';
-import '@fontsource/unbounded/700.css';
-import '@fontsource/onest/400.css';
-import '@fontsource/onest/500.css';
-import '@fontsource/onest/600.css';
+// Fraunces with the optical-size axis, so big headings get the display cut automatically.
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/inter';
 import '../styles/global.css';
-import unbounded700 from '@fontsource/unbounded/files/unbounded-latin-700-normal.woff2?url';
-import onest400 from '@fontsource/onest/files/onest-latin-400-normal.woff2?url';
+import frauncesLatin from '@fontsource-variable/fraunces/files/fraunces-latin-opsz-normal.woff2?url';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
@@ -36,8 +34,8 @@ const ogImage = new URL('/og-image.png', site.url).href;
     <meta name="description" content={description} />
     {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical} />}
     <meta name="theme-color" content="#FFFFFF" />
-    <link rel="preload" href={unbounded700} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={onest400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={frauncesLatin} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={interLatin} as="font" type="font/woff2" crossorigin />
 
     <link rel="icon" href="/favicon.ico" sizes="48x48" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />

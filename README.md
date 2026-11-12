@@ -2,7 +2,7 @@
 
 The Akbarov Labs website: home page and blog. Built with Astro as a static site, served by nginx in Docker on our own server, with Cloudflare in front.
 
-Design system A, "Ustaxona": lapis `#1E3A8A`, saffron `#F2B33D`, ink `#121826`, mist `#EEF1F7` on white; Unbounded for headings, Onest for text; girih (eight-point star) patterns. Tokens live in `src/styles/global.css`.
+Design system A, "Ustaxona": lapis `#1E3A8A`, saffron `#F2B33D`, ink `#121826`, mist `#EEF1F7` on white; Fraunces for headings, Inter for text; girih (eight-point star) patterns. Tokens live in `src/styles/global.css`.
 
 ## Run locally
 
