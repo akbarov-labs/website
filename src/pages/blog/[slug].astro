@@ -54,7 +54,7 @@ const jsonLd = {
       <span class="avatar"><Mark size={24} /></span>
       <span class="who">{site.founder}</span>
       <span class="when">
-        <time datetime={post.data.published.toISOString().slice(0, 10)}>{formatDate(post.data.published)}</time>{' · '}{readingMinutes(post.body)} daqiqa oʻqish
+        <time datetime={post.data.published.toISOString().slice(0, 10)}>{formatDate(post.data.published)}</time>{' · '}{readingMinutes(post.body)} daqiqada oʻqiladi
       </span>
     </div>
   </header>
@@ -82,7 +82,7 @@ const jsonLd = {
       <Content />
 
       <div class="cta">
-        <p>Botingiz kerakmi yoki yoʻqmi — qisqa suhbatda birga aniqlaymiz.</p>
+        <p>{post.data.topic === 'TELEGRAM' ? 'Sizga bot kerakmi yoki yoʻqmi — qisqa suhbatda birga aniqlaymiz.' : 'Loyihangiz haqida qisqa suhbatda birga oʻylab koʻramiz.'}</p>
         <a href={contactHref} class="btn btn-saffron">{contactLabel}</a>
       </div>
 
@@ -92,7 +92,7 @@ const jsonLd = {
         </div>
         <div>
           <strong>{site.founder}</strong>
-          <span>Akbarov Labs asoschisi. Saytlar, Telegram botlar va AI yechimlar quradi.</span>
+          <span>Akbarov Labs asoschisi. Saytlar, Telegram botlar va AI yechimlari quradi.</span>
         </div>
       </div>
     </article>

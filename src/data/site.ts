@@ -35,7 +35,7 @@ export const plans: Plan[] = [
     name: 'Landing sahifa',
     price: '',
     term: '',
-    items: ['Bir sahifali zamonaviy sayt', 'Telefon uchun moslashgan', 'Arizalar Telegramga keladi', 'Domen va hosting sozlash'],
+    items: ['Bir sahifali zamonaviy sayt', 'Telefonga moslashgan', 'Arizalar Telegramga keladi', 'Domen va hostingni sozlash'],
   },
   {
     name: 'Telegram bot',
@@ -48,7 +48,7 @@ export const plans: Plan[] = [
     name: 'Biznes tizimi (CRM)',
     price: '',
     term: '',
-    items: ['Mijozlar va buyurtmalar bazasi', 'Xodimlar uchun rollar', 'Kunlik va oylik hisobotlar', 'AI yordamchi (ixtiyoriy)'],
+    items: ['Mijozlar va buyurtmalar bazasi', 'Xodimlar uchun alohida huquqlar', 'Kunlik va oylik hisobotlar', 'AI yordamchi (ixtiyoriy)'],
   },
 ];
 

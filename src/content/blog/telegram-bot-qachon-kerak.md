@@ -1,6 +1,6 @@
 ---
 title: Telegram bot biznesingizga qachon kerak — va qachon kerak emas
-description: Har bir biznesga bot shart emas. Qaysi holatlarda bot pul ishlab beradi, qaysida esa oddiy Telegram kanal yetarli — misollar bilan.
+description: Har bir biznesga bot shart emas. Qaysi holatlarda bot pul ishlab beradi, qaysilarida esa oddiy Telegram kanal yetarli — misollar bilan.
 topic: TELEGRAM
 published: 2026-10-25
 ---
