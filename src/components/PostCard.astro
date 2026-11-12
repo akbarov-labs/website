@@ -11,7 +11,7 @@ const topic = topics.find((t) => t.id === post.data.topic)?.label ?? post.data.t
 ---
 <a href={postUrl(post)} class="card">
   <PostThumb topic={post.data.topic} id={`g-card-${post.id}`} />
-  <span class="meta"><span class="topic">{topic}</span> · {formatDate(post.data.published)} · {readingMinutes(post.body)} daq</span>
+  <span class="meta"><span class="topic">{topic}</span> · {formatDate(post.data.published)} · {readingMinutes(post.body)} daq.</span>
   <h3>{post.data.title}</h3>
   {excerpt && <p>{post.data.description}</p>}
 </a>

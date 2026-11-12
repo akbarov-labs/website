@@ -27,8 +27,8 @@ Ish davomida har hafta natijani koʻrsatamiz, oxirida ishga tushirib, qanday ish
 
 ## Narxi qancha?
 
-Har bir xizmatning boshlangʻich narxi saytdagi “Narxlar” boʻlimida. Narxi yozilmagan xizmatlar va aniq narx
-loyiha hajmiga bogʻliq: Sarvar vazifani koʻrib chiqib, narxini aytadi.
+Har bir xizmatning boshlangʻich narxi saytdagi “Narxlar” boʻlimida. Aniq narx loyiha hajmiga bogʻliq — narxi
+yozilmagan xizmatlarda ham: Sarvar vazifani koʻrib chiqib, narxini aytadi.
 
 ## Qancha vaqtda tayyor boʻladi?
 
@@ -45,13 +45,13 @@ TODO
 TODO
 <!-- Suggestion: how long fixes are free, what monthly support costs, hosting included or not. -->
 
-## Domen va hosting kim tomonidan sozlanadi?
+## Domen va hostingni kim sozlaydi?
 
 “Landing sahifa” xizmatiga domen va hosting sozlash kiradi. Boshqa loyihalar uchun bu suhbatda kelishiladi.
 
 ## Sayt yoki bot qaysi tillarda boʻladi?
 
-Oʻzbek, rus va ingliz tillarida qila olamiz. Ishlarimizning koʻpi uch tilda ishlaydi.
+Oʻzbek, rus va ingliz tillarida qila olamiz. Masalan, Kitoblarim uch tilda ishlaydi.
 
 ## Biznesimga AI yordamchi oʻrnatib bera olasizmi?
 

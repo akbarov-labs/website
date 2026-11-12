@@ -14,7 +14,7 @@ const topic = topics.find((t) => t.id === post.data.topic)?.label ?? post.data.t
   <div class="text">
     <span class="meta">
       {label && <span class="new">{label}</span>}
-      <span class="topic">{topic}</span> · {formatDate(post.data.published)} · {readingMinutes(post.body)} daq
+      <span class="topic">{topic}</span> · {formatDate(post.data.published)} · {readingMinutes(post.body)} daq.
     </span>
     <h2>{post.data.title}</h2>
     <p>{post.data.description}</p>

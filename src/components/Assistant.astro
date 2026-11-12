@@ -10,7 +10,7 @@ const messages = [
   { me: true, text: 'Salom! Klinikam uchun qabulga yozadigan bot kerak. Qancha vaqt ketadi?' },
   { me: false, text: 'Salom! Muddat vazifaga bogʻliq — qisqa suhbatda aniq aytamiz. Shifokorlaringiz nechta va toʻlovni bot orqali olasizmi?' },
   { me: true, text: '3 ta shifokor. Toʻlov hozircha kerak emas.' },
-  { me: false, text: 'Tushunarli. Arizangizni Sarvarga yubordim — u bugun oʻzi yozadi.' },
+  { me: false, text: 'Tushunarli. Ismingiz va Telegramingizni qoldiring — arizangizni Sarvarga yuboraman, u oʻzi yozadi.' },
 ];
 ---
 <figure class="chat" aria-label="AI yordamchi bilan namuna suhbat" data-assistant>
@@ -60,7 +60,7 @@ const messages = [
   const errors: Record<string, string> = {
     too_long: 'Xabar juda uzun: 1000 belgigacha yozing.',
     rate_limited: 'Juda koʻp xabar yuborildi. Birozdan keyin qayta urinib koʻring yoki Sarvarga toʻgʻridan-toʻgʻri yozing.',
-    conversation_full: 'Bu suhbatda xabarlar soni tugadi. Davom ettirish uchun Sarvarga toʻgʻridan-toʻgʻri yozing.',
+    conversation_full: 'Bu suhbatdagi xabarlar chegarasi tugadi. Davom ettirish uchun Sarvarga toʻgʻridan-toʻgʻri yozing.',
     budget: 'Yordamchi bugungi limitga yetdi. Sarvarga toʻgʻridan-toʻgʻri yozing — u oʻzi javob beradi.',
     captcha: 'Tekshiruvdan oʻtib boʻlmadi. Sahifani yangilab, qayta urinib koʻring.',
     unavailable: 'Hozir javob bera olmayapman. Birozdan keyin qayta urinib koʻring yoki Sarvarga toʻgʻridan-toʻgʻri yozing.',

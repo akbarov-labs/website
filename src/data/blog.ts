@@ -18,7 +18,7 @@ export async function getPosts(): Promise<Post[]> {
 const months = ['yanvar', 'fevral', 'mart', 'aprel', 'may', 'iyun', 'iyul', 'avgust', 'sentabr', 'oktabr', 'noyabr', 'dekabr'];
 
 export function formatDate(d: Date): string {
-  return `${d.getUTCDate()}-${months[d.getUTCMonth()]}, ${d.getUTCFullYear()}`;
+  return `${d.getUTCFullYear()}-yil ${d.getUTCDate()}-${months[d.getUTCMonth()]}`;
 }
 
 export function readingMinutes(body: string | undefined): number {
