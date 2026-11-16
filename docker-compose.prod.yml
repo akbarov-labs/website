@@ -30,7 +30,9 @@ services:
       - internal
     labels:
       caddy: ${DOMAIN:?set DOMAIN in .env, e.g. akbarovlabs.uz}
-      caddy.reverse_proxy: "{{upstreams 80}}"
+      # By container name, not {{upstreams 80}}: that renders as a bare
+      # :80 while the container restarts (kitoblarim.uz 502s, 2026-11-16).
+      caddy.reverse_proxy: "akbarovlabs-web:80"
       # The visitor's real address behind Cloudflare, for the assistant's
       # per-visitor limits (cloudflare-real-ip.md in akbarov-labs/reads).
       caddy.reverse_proxy.header_up: "X-Forwarded-For {client_ip}"
