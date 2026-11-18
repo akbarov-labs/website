@@ -12,7 +12,7 @@ import aktivYodla from '../../assets/works/aktiv-yodla.png';
 import posbon from '../../assets/works/posbon.png';
 import birgaolamizmi from '../../assets/works/birgaolamizmi.png';
 import { site } from '../../data/site';
-import { works } from '../../data/works';
+import { works, prototypes } from '../../data/works';
 
 const description =
   'Akbarov Labs is a software and AI studio in Uzbekistan. We build websites, Telegram bots, CRM systems and AI assistants for small businesses, and run our own Telegram-first products.';
@@ -61,6 +61,40 @@ const english: Record<string, { kind: string; text: string }> = {
 };
 
 const logos = { olgo, alifbo, 'aktiv-yodla': aktivYodla, posbon, birgaolamizmi };
+
+// English text for each prototype in src/data/works.ts, by id. None is client work.
+const protoEnglish: Record<string, { kind: string; text: string; linkText: string }> = {
+  'yashil-vodiy': {
+    kind: '3D website · uz/ru/en',
+    text: 'A scroll-driven 3D launch site for a residential complex in Tashkent: towers rise floor by floor, you pick a floor and see the flat inside, with real sunlight calculated for Tashkent. The complex is fictional.',
+    linkText: 'View the demo',
+  },
+  falak: {
+    kind: '3D product page',
+    text: 'A 3D product story for a watch: the case, the dial, an exploded movement, a strap picker and a wrist-fit check. The brand is fictional, and everything is built in code with no model files.',
+    linkText: 'View the demo',
+  },
+  'paper-boat': {
+    kind: '3D story',
+    text: 'As you scroll, a paper boat travels 38 km from a mountain spring to the sea. A study in scroll-driven storytelling.',
+    linkText: 'View the demo',
+  },
+  dentist: {
+    kind: 'Website template · uz/ru',
+    text: 'A site for a dentist in private practice: treatment cost calculator, live opening hours and booking through Telegram. The doctor and cases are examples.',
+    linkText: 'View the code',
+  },
+  rosemarine: {
+    kind: 'Website concept · uz/ru/en',
+    text: 'A storefront concept for a handmade organic soap brand. Not the brand’s official website.',
+    linkText: 'View the concept',
+  },
+  muqimiy: {
+    kind: 'Redesign concept',
+    text: 'A redesign concept for a Tashkent theatre’s website: repertoire, performances and news. Not the theatre’s official website.',
+    linkText: 'View the concept',
+  },
+};
 
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -184,6 +218,28 @@ const jsonLd = {
         </a>
       </li>
     </ul>
+
+    <!-- Prototypes: never client work, so every card says so -->
+    <div class="protos">
+      <p class="label">Prototypes</p>
+      <h3 class="protos-title">Not client projects: examples of what we can build</h3>
+      <p class="protos-lead">
+        We made these to show what we can do. The brands are fictional, or the sites are concepts we offered to businesses.
+        None of them is a real client project.
+      </p>
+      <ul class="works protos-list" role="list">
+        {prototypes.map((p) => (
+          <li>
+            <a href={p.href} class="w-card w-card-proto" rel="noopener">
+              <p class="meta"><span class="proto-tag">Prototype</span>{protoEnglish[p.id]?.kind ?? p.kind}</p>
+              <h3>{p.name}</h3>
+              <p class="w-text">{protoEnglish[p.id]?.text ?? p.text}</p>
+              <span class="w-link">{protoEnglish[p.id]?.linkText ?? p.linkText} →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   <!-- Founder -->
@@ -477,6 +533,41 @@ const jsonLd = {
   .next:hover {
     border-color: var(--lapis);
     color: var(--lapis);
+  }
+
+  .protos {
+    margin-top: 96px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line);
+  }
+  .protos-title {
+    margin: 8px 0 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(24px, 2.6vw, 32px);
+    line-height: 1.2;
+  }
+  .protos-lead {
+    max-width: 720px;
+    margin: 16px 0 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .protos-list {
+    margin-top: 32px;
+  }
+  .w-card-proto {
+    background: transparent;
+  }
+  .proto-tag {
+    background: var(--saffron);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
   }
   .next-text {
     font-family: var(--display);

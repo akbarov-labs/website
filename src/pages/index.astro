@@ -14,7 +14,7 @@ import posbon from '../assets/works/posbon.png';
 import birgaolamizmi from '../assets/works/birgaolamizmi.png';
 import { site, plans, contactHref, contactLabel } from '../data/site';
 import { services } from '../data/services';
-import { featuredWork, works } from '../data/works';
+import { featuredWork, works, prototypes } from '../data/works';
 import { getPosts } from '../data/blog';
 
 const posts = (await getPosts()).slice(0, 3);
@@ -116,6 +116,28 @@ const jsonLd = {
         </a>
       </li>
     </ul>
+
+    <!-- Prototypes: never client work, so every card says so -->
+    <div class="protos">
+      <p class="label">Prototiplar</p>
+      <h3 class="protos-title">Mijoz loyihalari emas — imkoniyatlarimiz namunasi</h3>
+      <p class="protos-lead">
+        Bu ishlarni nimalar qila olishimizni koʻrsatish uchun yasadik. Brendlar xayoliy yoki saytlar bizneslarga taklif
+        sifatida qilingan konsept — ularning hech biri haqiqiy mijoz loyihasi emas.
+      </p>
+      <ul class="works protos-list" role="list">
+        {prototypes.map((p) => (
+          <li>
+            <a href={p.href} class="w-card w-card-proto" rel="noopener">
+              <p class="meta"><span class="proto-tag">Prototip</span>{p.kind}</p>
+              <h3>{p.name}</h3>
+              <p class="w-text">{p.text}</p>
+              <span class="w-link">{p.linkText} →</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
   </section>
 
   <!-- AI -->
@@ -492,6 +514,41 @@ const jsonLd = {
   }
   .next:hover .next-arrow {
     transform: translateX(4px);
+  }
+
+  .protos {
+    margin-top: 96px;
+    padding-top: 48px;
+    border-top: 1px solid var(--line);
+  }
+  .protos-title {
+    margin: 8px 0 0;
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(24px, 2.6vw, 32px);
+    line-height: 1.2;
+  }
+  .protos-lead {
+    max-width: 720px;
+    margin: 16px 0 0;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--body);
+  }
+  .protos-list {
+    margin-top: 32px;
+  }
+  .w-card-proto {
+    background: transparent;
+  }
+  .proto-tag {
+    background: var(--saffron);
+    color: var(--ink);
+    border-radius: 8px;
+    padding: 3px 8px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
   }
 
   .ai {
