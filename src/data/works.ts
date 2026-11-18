@@ -60,8 +60,8 @@ export const works: Work[] = [
     name: 'Posbon',
     kind: 'Telegram bot',
     text: 'Telegram guruhlarini qoʻriqlaydi: yangi aʼzolarga captcha, spam va reklamaga qarshi himoya. Barcha sozlamalar bot bilan shaxsiy chatda.',
-    href: 'https://t.me/PosbonGuruhBot',
-    linkText: '@PosbonGuruhBot',
+    href: 'https://t.me/Posboncha_bot',
+    linkText: '@Posboncha_bot',
   },
   {
     id: 'birgaolamizmi',
