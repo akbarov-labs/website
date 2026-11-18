@@ -35,9 +35,14 @@ const switchLang = en
       {links.map((l) => (
         <a href={l.href} aria-current={l.active ? 'page' : undefined}>{l.label}</a>
       ))}
-      <a href={switchLang.href} hreflang={switchLang.hreflang} lang={switchLang.hreflang} title={switchLang.title} class="lang">{switchLang.label}</a>
     </div>
-    <a href={en ? '#contact' : `${home}#aloqa`} class="btn btn-primary btn-sm">{en ? 'Contact' : 'Bogʻlanish'}</a>
+    <div class="actions">
+      <div class="lang" role="group" aria-label={en ? 'Language' : 'Til'}>
+        <span class="lang-on" aria-current="true">{en ? 'EN' : 'UZ'}</span>
+        <a href={switchLang.href} hreflang={switchLang.hreflang} lang={switchLang.hreflang} title={switchLang.title}>{switchLang.label}</a>
+      </div>
+      <a href={en ? '#contact' : `${home}#aloqa`} class="btn btn-primary btn-sm">{en ? 'Contact' : 'Bogʻlanish'}</a>
+    </div>
   </nav>
 </header>
 
@@ -83,11 +88,36 @@ const switchLang = en
   .links a:hover {
     color: var(--lapis);
   }
-  .links .lang {
-    color: var(--muted);
-    font-size: 14px;
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .lang {
+    display: flex;
+    align-items: center;
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 13px;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    line-height: 1;
+  }
+  .lang > * {
+    padding: 8px 11px;
+    border-radius: 999px;
+  }
+  .lang-on {
+    background: var(--ink);
+    color: var(--white);
+  }
+  .lang a {
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .lang a:hover {
+    color: var(--lapis);
   }
   .links a[aria-current='page'] {
     color: var(--lapis);
@@ -99,9 +129,20 @@ const switchLang = en
   @media (max-width: 760px) {
     .nav {
       justify-content: space-between;
+      column-gap: 12px;
     }
     .brand {
       font-size: 16px;
+    }
+    .actions {
+      gap: 8px;
+    }
+    /* No room for both halves on a phone: show only the language to switch to. */
+    .lang-on {
+      display: none;
+    }
+    .lang > * {
+      padding: 8px 9px;
     }
     .links {
       order: 3;
