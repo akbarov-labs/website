@@ -6,7 +6,7 @@
 import { readFile, readdir } from 'node:fs/promises';
 import { site, plans } from '../../src/data/site.ts';
 import { services } from '../../src/data/services.ts';
-import { featuredWork, works } from '../../src/data/works.ts';
+import { featuredWork, works, prototypes } from '../../src/data/works.ts';
 
 const blogDir = new URL('../../src/content/blog/', import.meta.url);
 const faqFile = new URL('../faq.md', import.meta.url);
@@ -41,6 +41,10 @@ export async function buildKnowledge(): Promise<Knowledge> {
       `- ${featuredWork.name} (${featuredWork.kind}): ${featuredWork.text} Imkoniyatlari: ${featuredWork.features.join('; ')}. ` +
         featuredWork.links.map((l) => `${l.text}: ${l.href}`).join('; '),
       ...works.map((w) => `- ${w.name} (${w.kind}): ${w.text} ${w.href}`),
+    ]),
+    section('Prototiplar (mijoz loyihalari EMAS)', [
+      'Bular imkoniyatlarimizni koʻrsatish uchun yasalgan prototiplar. Brendlar xayoliy yoki saytlar bizneslarga taklif sifatida qilingan konsept. Ularni hech qachon mijoz loyihasi yoki ishga tushirilgan ish deb aytma.',
+      ...prototypes.map((p) => `- ${p.name} (prototip, ${p.kind}): ${p.text} ${p.href}`),
     ]),
     section(
       'Blog maqolalari',

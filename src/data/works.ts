@@ -72,3 +72,67 @@ export const works: Work[] = [
     linkText: 'birgaolamiz.akbarovlabs.uz',
   },
 ];
+
+// Prototypes: work we made to show what we can build. None of these is a
+// client project. The brands are fictional, or the sites are unsolicited
+// concepts that the businesses did not take, so the page and the assistant
+// must always call them prototypes.
+export type Prototype = {
+  id: string;
+  name: string;
+  kind: string;
+  text: string;
+  href: string;
+  linkText: string;
+};
+
+export const prototypes: Prototype[] = [
+  {
+    id: 'yashil-vodiy',
+    name: 'Yashil Vodiy Residence',
+    kind: '3D sayt · uz/ru/en',
+    text: 'Toshkentdagi turar-joy majmuasi uchun skroll bilan harakatlanadigan 3D sayt: binolar qavatma-qavat quriladi, qavat tanlanadi, kvartira ichi va Toshkent uchun hisoblangan haqiqiy quyosh nuri koʻrsatiladi. Majmua xayoliy.',
+    href: 'https://akbarov-labs.github.io/yashil-vodiy/',
+    linkText: 'Demoni koʻrish',
+  },
+  {
+    id: 'falak',
+    name: 'Falak Observatory 41',
+    kind: '3D mahsulot sahifasi',
+    text: 'Soat uchun 3D taqdimot: korpus, siferblat, mexanizm qismlarga ajraladi, tasma almashtiriladi va bilakka oʻlchab koʻriladi. Brend xayoliy, model fayllarsiz, toʻliq kodda yasalgan.',
+    href: 'https://akbarov-labs.github.io/falak-watch-story/',
+    linkText: 'Demoni koʻrish',
+  },
+  {
+    id: 'paper-boat',
+    name: 'Paper Boat Voyage',
+    kind: '3D hikoya',
+    text: 'Skroll qilganingiz sari qogʻoz qayiq togʻ bulogʻidan dengizgacha 38 km suzib boradi. Skroll orqali hikoya qilish texnikasi namunasi.',
+    href: 'https://akbarov-labs.github.io/paper-boat-voyage/',
+    linkText: 'Demoni koʻrish',
+  },
+  {
+    id: 'dentist',
+    name: 'Stomatolog sayti',
+    kind: 'Sayt shabloni · uz/ru',
+    text: 'Xususiy stomatolog uchun sayt: davolash narxi kalkulyatori, “hozir ochiq” ish vaqti va Telegramga qabulga yozilish. Shifokor va holatlar namuna sifatida berilgan.',
+    href: 'https://github.com/akbarov-labs/dentist-2',
+    linkText: 'Kodni koʻrish',
+  },
+  {
+    id: 'rosemarine',
+    name: 'Organik sovun brendi',
+    kind: 'Sayt konsepti · uz/ru/en',
+    text: 'Qoʻlda tayyorlangan organik sovun brendi uchun doʻkon konsepti. Brendning rasmiy sayti emas.',
+    href: 'https://rosemarine.vercel.app',
+    linkText: 'Konseptni koʻrish',
+  },
+  {
+    id: 'muqimiy',
+    name: 'Teatr sayti',
+    kind: 'Redizayn konsepti',
+    text: 'Toshkentdagi teatr sayti uchun redizayn konsepti: repertuar, spektakllar, yangiliklar. Teatrning rasmiy sayti emas.',
+    href: 'https://muqumiy-concept.vercel.app',
+    linkText: 'Konseptni koʻrish',
+  },
+];
